@@ -1,8 +1,11 @@
 package com.brekol.model.scene;
 
+import com.brekol.loader.AnimalLoader;
+import com.brekol.loader.MainLevelLoader;
 import com.brekol.manager.ResourcesManager;
 import com.brekol.manager.SceneManager;
-import com.brekol.model.loader.MainLevelLoader;
+import com.brekol.matcher.ClassIEntityMatcher;
+import com.brekol.model.shape.Animal;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.LevelType;
 import com.brekol.util.SceneType;
@@ -27,6 +30,8 @@ public class GameScene extends BaseScene {
     private int score;
     private SimpleLevelLoader levelLoader;
     private EntityLoader mainLevelLoader;
+    private EntityLoader animalLoader;
+    private boolean isBackKeyPressed = false;
 
     @Override
     public void createScene() {
@@ -37,20 +42,23 @@ public class GameScene extends BaseScene {
     }
 
     private void init() {
+        clearUpdateHandlers();
+        clearTouchAreas();
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
+        animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(ConstantsUtil.TAG_ANIMAL);
         levelLoader = new SimpleLevelLoader(vertexBufferObjectManager);
 
     }
 
     private void loadLevel(int levelID) {
-
         levelLoader.registerEntityLoader(mainLevelLoader);
+        levelLoader.registerEntityLoader(animalLoader);
         levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");
     }
 
     private void createHUD() {
         gameHUD = new HUD();
-        scoreText = new Text(130, 445, resourcesManager.getMediumFont(), "Score: 999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
+        scoreText = new Text(144, 40, resourcesManager.getBlackFont(), "Score: 999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
         scoreText.setText("Score: 0");
 
         gameHUD.attachChild(scoreText);
@@ -66,9 +74,29 @@ public class GameScene extends BaseScene {
         scoreText.setText("Score: " + score);
     }
 
+
+    @Override
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
+
+        if(isBackKeyPressed){
+            isBackKeyPressed =false;
+            Animal animal = null;
+            do{
+                animal = (Animal) getChildByMatcher(new ClassIEntityMatcher(Animal.class));
+                detachChild(animal);
+            }while (animal != null);
+            detachSelf();
+
+            SceneManager.getInstance().loadMenuSceneFrom(SceneType.GAME);
+        }
+
+
+    }
+
     @Override
     public void onBackKeyPressed() {
-        SceneManager.getInstance().loadMenuSceneFrom(SceneType.GAME);
+        isBackKeyPressed = true;
     }
 
     @Override

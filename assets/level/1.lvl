@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="800" height="480">
-
+    <animal/>
+    <animal/>
+    <animal/>
+    <animal/>
+    <animal/>
+    <animal/>
 </level>

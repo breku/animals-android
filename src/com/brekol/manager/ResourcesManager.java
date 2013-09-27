@@ -16,6 +16,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: Breku
  * Date: 21.09.13
@@ -28,13 +31,14 @@ public class ResourcesManager {
     private Camera camera;
     private VertexBufferObjectManager vertexBufferObjectManager;
 
-    private BitmapTextureAtlas splashTextureAtlas, fontTextureAtlas;
+    private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas;
     private BuildableBitmapTextureAtlas gameTextureAtlas, menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas;
 
     private ITextureRegion splashTextureRegion, buttonAboutTextureRegion, buttonExitTextureRegion, buttonNewGameTextureRegion,
             buttonOptionsTextureRegion, menuBackgroundTextureRegion, waterTextureRegion, aboutTextureRegion, aboutBackgroundtTextureRegion,
             optionsBackgroundTextureRegion, optionsTextureRegion;
-    private Font mediumFont;
+    private Map<Integer, ITextureRegion> animalTextureRegionMap;
+    private Font whiteFont, blackFont;
 
 
     public static void prepareManager(Engine engine, BaseGameActivity activity, Camera camera, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -59,6 +63,7 @@ public class ResourcesManager {
 
     public void loadGameResources() {
         loadGameGraphics();
+        loadGameFonts();
     }
 
     private void loadAboutGraphics() {
@@ -94,13 +99,29 @@ public class ResourcesManager {
 
     private void loadGameGraphics() {
 
+        // gameTextureAtlas has been created before, we just need to reload the textures
+        if(gameTextureAtlas != null){
+            gameTextureAtlas.load();
+            return;
+        }
+
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 
         waterTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "water.png");
 
+
+        animalTextureRegionMap = new HashMap<Integer, ITextureRegion>();
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/animals/");
+        animalTextureRegionMap.put(0,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "bunny.jpg"));
+        animalTextureRegionMap.put(1,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "duck.jpg"));
+        animalTextureRegionMap.put(2,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "frog.jpg"));
+        animalTextureRegionMap.put(3,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "lion.jpg"));
+        animalTextureRegionMap.put(4,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "penguin.jpg"));
+        animalTextureRegionMap.put(5,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "monkey.jpg"));
+
         try {
-            gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+            gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
             gameTextureAtlas.load();
         } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
             e.printStackTrace();
@@ -108,7 +129,17 @@ public class ResourcesManager {
 
     }
 
+    public ITextureRegion getAnimalTexture(Integer animalNumber){
+        return animalTextureRegionMap.get(animalNumber);
+    }
+
     private void loadMainMenuGraphics() {
+
+        if(menuTextureAtlas != null){
+            menuTextureAtlas.load();
+            return;
+        }
+
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
         menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 
@@ -137,12 +168,27 @@ public class ResourcesManager {
         menuTextureAtlas.load();
     }
 
+    private void loadGameFonts(){
+        if(gameFontTextureAtlas!= null){
+            return;
+        }
+        FontFactory.setAssetBasePath("font/");
+        gameFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        blackFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), gameFontTextureAtlas, activity.getAssets(), "font1.ttf", 50, true, Color.BLACK, 2, Color.BLACK);
+        gameFontTextureAtlas.load();
+        blackFont.load();
+    }
+
 
     private void loadMainMenuFonts() {
+        if(menuFontTextureAtlas != null){
+            return;
+        }
         FontFactory.setAssetBasePath("font/");
-        fontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mediumFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), fontTextureAtlas, activity.getAssets(), "mediumFont2.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
-        mediumFont.load();
+        menuFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        whiteFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), menuFontTextureAtlas, activity.getAssets(), "font2.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
+        menuFontTextureAtlas.load();
+        whiteFont.load();
     }
 
 
@@ -150,7 +196,6 @@ public class ResourcesManager {
         splashTextureAtlas.unload();
         splashTextureRegion = null;
     }
-
 
     public void unloadOptionsTextures() {
         optionsTextureAtlas.unload();
@@ -213,10 +258,6 @@ public class ResourcesManager {
         return menuBackgroundTextureRegion;
     }
 
-    public Font getMediumFont() {
-        return mediumFont;
-    }
-
     public ITextureRegion getWaterTextureRegion() {
         return waterTextureRegion;
     }
@@ -235,5 +276,13 @@ public class ResourcesManager {
 
     public ITextureRegion getOptionsTextureRegion() {
         return optionsTextureRegion;
+    }
+
+    public Font getWhiteFont() {
+        return whiteFont;
+    }
+
+    public Font getBlackFont() {
+        return blackFont;
     }
 }

@@ -1,4 +1,4 @@
-package com.brekol.model.loader;
+package com.brekol.loader;
 
 import com.brekol.model.scene.BaseScene;
 import org.andengine.entity.IEntity;
