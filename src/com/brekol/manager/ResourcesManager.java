@@ -1,6 +1,8 @@
 package com.brekol.manager;
 
 import android.graphics.Color;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
@@ -15,7 +17,9 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ public class ResourcesManager {
             buttonOptionsTextureRegion, menuBackgroundTextureRegion, waterTextureRegion, aboutTextureRegion, aboutBackgroundtTextureRegion,
             optionsBackgroundTextureRegion, optionsTextureRegion;
     private Map<Integer, ITextureRegion> animalTextureRegionMap;
+    private Map<Integer, Sound> animalSoundMap;
     private Font whiteFont, blackFont;
 
 
@@ -64,6 +69,24 @@ public class ResourcesManager {
     public void loadGameResources() {
         loadGameGraphics();
         loadGameFonts();
+        loadGameMusic();
+    }
+
+    private void loadGameMusic() {
+        if(animalSoundMap != null){
+            return;
+        }
+        animalSoundMap = new HashMap<Integer, Sound>();
+
+        SoundFactory.setAssetBasePath("mfx/");
+
+        try {
+            for(int i =0;i <6;i++){
+                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), (i+1)+".wav"));
+            }
+        } catch (final IOException e) {
+            Debug.e(e);
+        }
     }
 
     private void loadAboutGraphics() {
@@ -131,6 +154,10 @@ public class ResourcesManager {
 
     public ITextureRegion getAnimalTexture(Integer animalNumber){
         return animalTextureRegionMap.get(animalNumber);
+    }
+
+    public Sound getAnimalSound(Integer animalNumber){
+        return animalSoundMap.get(animalNumber);
     }
 
     private void loadMainMenuGraphics() {

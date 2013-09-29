@@ -5,6 +5,7 @@ import com.brekol.loader.MainLevelLoader;
 import com.brekol.manager.ResourcesManager;
 import com.brekol.manager.SceneManager;
 import com.brekol.matcher.ClassIEntityMatcher;
+import com.brekol.matcher.ClassTouchAreaMacher;
 import com.brekol.model.shape.Animal;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.LevelType;
@@ -45,12 +46,13 @@ public class GameScene extends BaseScene {
         clearUpdateHandlers();
         clearTouchAreas();
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
-        animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(ConstantsUtil.TAG_ANIMAL);
+        animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this,ConstantsUtil.TAG_ANIMAL);
         levelLoader = new SimpleLevelLoader(vertexBufferObjectManager);
 
     }
 
     private void loadLevel(int levelID) {
+        unregisterTouchAreas(new ClassTouchAreaMacher(Animal.class));
         levelLoader.registerEntityLoader(mainLevelLoader);
         levelLoader.registerEntityLoader(animalLoader);
         levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");

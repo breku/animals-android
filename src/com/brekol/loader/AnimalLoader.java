@@ -1,5 +1,7 @@
 package com.brekol.loader;
 
+import com.brekol.model.scene.BaseScene;
+import com.brekol.model.shape.Animal;
 import com.brekol.pool.AnimalPool;
 import org.andengine.entity.IEntity;
 import org.andengine.util.level.EntityLoader;
@@ -14,13 +16,17 @@ import java.io.IOException;
  */
 public class AnimalLoader<T extends IEntityLoaderData> extends EntityLoader<T>{
 
-    public AnimalLoader(String... pEntityNames) {
+    private BaseScene scene;
+
+    public AnimalLoader(BaseScene scene,String... pEntityNames) {
         super(pEntityNames);
+        this.scene = scene;
     }
 
     @Override
     public IEntity onLoadEntity(String pEntityName, IEntity pParent, Attributes pAttributes, IEntityLoaderData pEntityLoaderData) throws IOException {
-
-        return AnimalPool.getInstance().obtainPoolItem();
+        final Animal levelObject = AnimalPool.getInstance().obtainPoolItem();
+        scene.registerTouchArea(levelObject);
+        return levelObject;
     }
 }
