@@ -1,6 +1,7 @@
 package com.brekol.manager;
 
 import android.graphics.Color;
+import com.brekol.util.ConstantsUtil;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
@@ -81,8 +82,8 @@ public class ResourcesManager {
         SoundFactory.setAssetBasePath("mfx/");
 
         try {
-            for(int i =0;i <6;i++){
-                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), (i+1)+".wav"));
+            for(int i =0;i < ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), (i+1)+".ogg"));
             }
         } catch (final IOException e) {
             Debug.e(e);
