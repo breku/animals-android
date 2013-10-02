@@ -46,7 +46,7 @@ public class GameScene extends BaseScene {
         clearUpdateHandlers();
         clearTouchAreas();
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
-        animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this,ConstantsUtil.TAG_ANIMAL);
+        animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_ANIMAL);
         levelLoader = new SimpleLevelLoader(vertexBufferObjectManager);
 
     }
@@ -81,13 +81,13 @@ public class GameScene extends BaseScene {
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
 
-        if(isBackKeyPressed){
-            isBackKeyPressed =false;
+        if (isBackKeyPressed) {
+            isBackKeyPressed = false;
             Animal animal = null;
-            do{
+            do {
                 animal = (Animal) getChildByMatcher(new ClassIEntityMatcher(Animal.class));
                 detachChild(animal);
-            }while (animal != null);
+            } while (animal != null);
             detachSelf();
 
             SceneManager.getInstance().loadMenuSceneFrom(SceneType.GAME);

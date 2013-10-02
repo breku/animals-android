@@ -14,11 +14,11 @@ import java.io.IOException;
  * User: Breku
  * Date: 24.09.13
  */
-public class AnimalLoader<T extends IEntityLoaderData> extends EntityLoader<T>{
+public class AnimalLoader<T extends IEntityLoaderData> extends EntityLoader<T> {
 
     private BaseScene scene;
 
-    public AnimalLoader(BaseScene scene,String... pEntityNames) {
+    public AnimalLoader(BaseScene scene, String... pEntityNames) {
         super(pEntityNames);
         this.scene = scene;
     }

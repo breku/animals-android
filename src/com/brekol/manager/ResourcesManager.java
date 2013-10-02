@@ -75,7 +75,7 @@ public class ResourcesManager {
     }
 
     private void loadGameMusic() {
-        if(animalSoundMap != null){
+        if (animalSoundMap != null) {
             return;
         }
         animalSoundMap = new HashMap<Integer, Sound>();
@@ -83,8 +83,8 @@ public class ResourcesManager {
         SoundFactory.setAssetBasePath("mfx/animals/");
 
         try {
-            for(int i =0;i < ConstantsUtil.NUMBER_OF_ANIMALS * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL;i++){
-                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), i+".ogg"));
+            for (int i = 0; i < ConstantsUtil.NUMBER_OF_ANIMALS * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL; i++) {
+                animalSoundMap.put(i, SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), i + ".ogg"));
             }
         } catch (final IOException e) {
             Debug.e(e);
@@ -125,8 +125,8 @@ public class ResourcesManager {
     private void loadGameGraphics() {
 
         // gameTextureAtlas has been created before, we just need to reload the textures
-        if(gameTextureAtlasList!= null){
-            for(BuildableBitmapTextureAtlas atlas : gameTextureAtlasList){
+        if (gameTextureAtlasList != null) {
+            for (BuildableBitmapTextureAtlas atlas : gameTextureAtlasList) {
                 atlas.load();
             }
             return;
@@ -135,7 +135,7 @@ public class ResourcesManager {
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlasList = new ArrayList<BuildableBitmapTextureAtlas>();
-        for(int i =0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+        for (int i = 0; i < ConstantsUtil.NUMBER_OF_ANIMALS; i++) {
             gameTextureAtlasList.add(new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR));
         }
 
@@ -144,13 +144,13 @@ public class ResourcesManager {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/animals/");
 
 
-        for(int i=0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
-            animalTextureRegionMap.put(i,BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlasList.get(i), activity, i+".jpg",2,2));
+        for (int i = 0; i < ConstantsUtil.NUMBER_OF_ANIMALS; i++) {
+            animalTextureRegionMap.put(i, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlasList.get(i), activity, i + ".jpg", 2, 2));
         }
 
 
         try {
-            for(int i =0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+            for (int i = 0; i < ConstantsUtil.NUMBER_OF_ANIMALS; i++) {
                 gameTextureAtlasList.get(i).build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
                 gameTextureAtlasList.get(i).load();
             }
@@ -160,7 +160,7 @@ public class ResourcesManager {
 
     }
 
-    public Sound[] getAnimalSound(Integer animalNumber){
+    public Sound[] getAnimalSound(Integer animalNumber) {
         return new Sound[]{animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL),
                 animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL + 1),
                 animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL + 2),
@@ -169,7 +169,7 @@ public class ResourcesManager {
 
     private void loadMainMenuGraphics() {
 
-        if(menuTextureAtlas != null){
+        if (menuTextureAtlas != null) {
             menuTextureAtlas.load();
             return;
         }
@@ -202,8 +202,8 @@ public class ResourcesManager {
         menuTextureAtlas.load();
     }
 
-    private void loadGameFonts(){
-        if(gameFontTextureAtlas!= null){
+    private void loadGameFonts() {
+        if (gameFontTextureAtlas != null) {
             return;
         }
         FontFactory.setAssetBasePath("font/");
@@ -215,7 +215,7 @@ public class ResourcesManager {
 
 
     private void loadMainMenuFonts() {
-        if(menuFontTextureAtlas != null){
+        if (menuFontTextureAtlas != null) {
             return;
         }
         FontFactory.setAssetBasePath("font/");
@@ -240,7 +240,7 @@ public class ResourcesManager {
     }
 
     public void unloadGameTextures() {
-        for(BuildableBitmapTextureAtlas atlas : gameTextureAtlasList){
+        for (BuildableBitmapTextureAtlas atlas : gameTextureAtlasList) {
             atlas.unload();
         }
     }

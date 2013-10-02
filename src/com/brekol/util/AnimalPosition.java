@@ -5,12 +5,12 @@ package com.brekol.util;
  * Date: 24.09.13
  */
 public enum AnimalPosition {
-    A(144,180),
-    B(400,180),
-    C(656,180),
-    D(144,380),
-    E(400,380),
-    F(656,380);
+    A(144, 180),
+    B(400, 180),
+    C(656, 180),
+    D(144, 380),
+    E(400, 380),
+    F(656, 380);
 
     private int x;
     private int y;

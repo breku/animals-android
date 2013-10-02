@@ -8,6 +8,8 @@ import org.andengine.audio.sound.Sound;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.input.touch.TouchEvent;
 
+import java.util.Random;
+
 /**
  * User: Breku
  * Date: 24.09.13
@@ -16,6 +18,7 @@ public class Animal extends AnimatedSprite {
 
     private Sound[] animalSound = new Sound[ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL];
     private boolean isClicked = false;
+    private Random random = new Random();
 
 
     public Animal(AnimalPosition animalPosition, Integer animalID) {
@@ -32,13 +35,13 @@ public class Animal extends AnimatedSprite {
 
     @Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-        if (!isClicked){
-            switch (pSceneTouchEvent.getAction()){
+        if (!isClicked) {
+            switch (pSceneTouchEvent.getAction()) {
                 case TouchEvent.ACTION_UP:
                     isClicked = true;
-                    animalSound[0].play();
+                    animalSound[random.nextInt(ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL)].play();
 
-                    this.setCurrentTileIndex((this.getCurrentTileIndex()+1)%this.getTileCount());
+                    this.setCurrentTileIndex((this.getCurrentTileIndex() + 1) % this.getTileCount());
                     isClicked = false;
                     return true;
             }

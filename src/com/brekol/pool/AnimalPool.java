@@ -2,7 +2,12 @@ package com.brekol.pool;
 
 import com.brekol.model.shape.Animal;
 import com.brekol.util.AnimalPosition;
+import com.brekol.util.ConstantsUtil;
 import org.andengine.util.adt.pool.GenericPool;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * User: Breku
@@ -12,8 +17,10 @@ public class AnimalPool extends GenericPool<Animal> {
 
     private static final AnimalPool INSTANCE = new AnimalPool();
     private int counter = 0;
+    private Random random = new Random();
+    private List<Integer> currentAnimalIDs = new ArrayList<Integer>();
 
-    private AnimalPool(){
+    private AnimalPool() {
     }
 
 
@@ -22,22 +29,33 @@ public class AnimalPool extends GenericPool<Animal> {
      */
     @Override
     protected Animal onAllocatePoolItem() {
-        switch (counter%6){
+        switch (counter++ % 6) {
             case 0:
-                return new Animal(AnimalPosition.A,counter++);
+                return new Animal(AnimalPosition.A, getNewAnimalID());
             case 1:
-                return new Animal(AnimalPosition.B,counter++);
+                return new Animal(AnimalPosition.B, getNewAnimalID());
             case 2:
-                return new Animal(AnimalPosition.C,counter++);
+                return new Animal(AnimalPosition.C, getNewAnimalID());
             case 3:
-                return new Animal(AnimalPosition.D,counter++);
+                return new Animal(AnimalPosition.D, getNewAnimalID());
             case 4:
-                return new Animal(AnimalPosition.E,counter++);
+                return new Animal(AnimalPosition.E, getNewAnimalID());
             case 5:
-                return new Animal(AnimalPosition.F,counter++);
+                return new Animal(AnimalPosition.F, getNewAnimalID());
             default:
                 throw new UnsupportedOperationException("Wrong animal Position!");
         }
+    }
+
+    private Integer getNewAnimalID() {
+        Integer result = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS);
+
+        while (currentAnimalIDs.contains(result)) {
+            result = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS);
+        }
+
+        currentAnimalIDs.add(result);
+        return result;
     }
 
     /**
@@ -47,6 +65,9 @@ public class AnimalPool extends GenericPool<Animal> {
     protected void onHandleRecycleItem(Animal pItem) {
         pItem.reset();
         pItem.setCurrentTileIndex(0);
+        if (getAvailableItemCount() == ConstantsUtil.NUMBER_OF_ANIMALS) {
+            currentAnimalIDs.clear();
+        }
         super.onHandleRecycleItem(pItem);
     }
 
