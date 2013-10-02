@@ -45,6 +45,8 @@ public class AnimalPool extends GenericPool<Animal> {
      */
     @Override
     protected void onHandleRecycleItem(Animal pItem) {
+        pItem.reset();
+        pItem.setCurrentTileIndex(0);
         super.onHandleRecycleItem(pItem);
     }
 

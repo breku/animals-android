@@ -2,7 +2,6 @@ package com.brekol.model.scene;
 
 import com.brekol.loader.AnimalLoader;
 import com.brekol.loader.MainLevelLoader;
-import com.brekol.manager.ResourcesManager;
 import com.brekol.manager.SceneManager;
 import com.brekol.matcher.ClassIEntityMatcher;
 import com.brekol.matcher.ClassTouchAreaMacher;
@@ -11,10 +10,11 @@ import com.brekol.util.ConstantsUtil;
 import com.brekol.util.LevelType;
 import com.brekol.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
-import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
@@ -68,7 +68,7 @@ public class GameScene extends BaseScene {
     }
 
     private void createBackground() {
-        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, ResourcesManager.getInstance().getWaterTextureRegion(), vertexBufferObjectManager));
+        setBackground(new Background(Color.WHITE));
     }
 
     private void addToScore() {

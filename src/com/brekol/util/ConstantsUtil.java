@@ -15,7 +15,8 @@ public class ConstantsUtil implements Constants, LevelConstants {
     public static final float LOADING_SCENE_TIME = 0.1f;
     public static final float SPLASH_SCREEN_TIME = 0.2f;
 
-    public static final int NUMBER_OF_ANIMALS = 36;
+    public static final int NUMBER_OF_ANIMALS = 25;
+    public static final int NUMBER_OF_SOUNDS_PER_ANIMAL = 4;
 
     public static final String TAG_ANIMAL = "animal";
 

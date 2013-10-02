@@ -16,13 +16,13 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Breku
@@ -37,12 +37,13 @@ public class ResourcesManager {
     private VertexBufferObjectManager vertexBufferObjectManager;
 
     private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas;
-    private BuildableBitmapTextureAtlas gameTextureAtlas, menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas;
+    private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas;
+    private List<BuildableBitmapTextureAtlas> gameTextureAtlasList;
 
     private ITextureRegion splashTextureRegion, buttonAboutTextureRegion, buttonExitTextureRegion, buttonNewGameTextureRegion,
-            buttonOptionsTextureRegion, menuBackgroundTextureRegion, waterTextureRegion, aboutTextureRegion, aboutBackgroundtTextureRegion,
+            buttonOptionsTextureRegion, menuBackgroundTextureRegion, aboutTextureRegion, aboutBackgroundtTextureRegion,
             optionsBackgroundTextureRegion, optionsTextureRegion;
-    private Map<Integer, ITextureRegion> animalTextureRegionMap;
+    private Map<Integer, ITiledTextureRegion> animalTextureRegionMap;
     private Map<Integer, Sound> animalSoundMap;
     private Font whiteFont, blackFont;
 
@@ -79,11 +80,11 @@ public class ResourcesManager {
         }
         animalSoundMap = new HashMap<Integer, Sound>();
 
-        SoundFactory.setAssetBasePath("mfx/");
+        SoundFactory.setAssetBasePath("mfx/animals/");
 
         try {
-            for(int i =0;i < ConstantsUtil.NUMBER_OF_ANIMALS;i++){
-                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), (i+1)+".ogg"));
+            for(int i =0;i < ConstantsUtil.NUMBER_OF_ANIMALS * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL;i++){
+                animalSoundMap.put(i,SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), getActivity(), i+".ogg"));
             }
         } catch (final IOException e) {
             Debug.e(e);
@@ -124,41 +125,46 @@ public class ResourcesManager {
     private void loadGameGraphics() {
 
         // gameTextureAtlas has been created before, we just need to reload the textures
-        if(gameTextureAtlas != null){
-            gameTextureAtlas.load();
+        if(gameTextureAtlasList!= null){
+            for(BuildableBitmapTextureAtlas atlas : gameTextureAtlasList){
+                atlas.load();
+            }
             return;
         }
 
+
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+        gameTextureAtlasList = new ArrayList<BuildableBitmapTextureAtlas>();
+        for(int i =0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+            gameTextureAtlasList.add(new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR));
+        }
 
-        waterTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "water.png");
 
-
-        animalTextureRegionMap = new HashMap<Integer, ITextureRegion>();
+        animalTextureRegionMap = new HashMap<Integer, ITiledTextureRegion>();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/animals/");
-        animalTextureRegionMap.put(0,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "bunny.jpg"));
-        animalTextureRegionMap.put(1,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "duck.jpg"));
-        animalTextureRegionMap.put(2,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "frog.jpg"));
-        animalTextureRegionMap.put(3,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "lion.jpg"));
-        animalTextureRegionMap.put(4,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "penguin.jpg"));
-        animalTextureRegionMap.put(5,BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "monkey.jpg"));
+
+
+        for(int i=0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+            animalTextureRegionMap.put(i,BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlasList.get(i), activity, i+".jpg",2,2));
+        }
+
 
         try {
-            gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
-            gameTextureAtlas.load();
+            for(int i =0;i<ConstantsUtil.NUMBER_OF_ANIMALS;i++){
+                gameTextureAtlasList.get(i).build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+                gameTextureAtlasList.get(i).load();
+            }
         } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
             e.printStackTrace();
         }
 
     }
 
-    public ITextureRegion getAnimalTexture(Integer animalNumber){
-        return animalTextureRegionMap.get(animalNumber);
-    }
-
-    public Sound getAnimalSound(Integer animalNumber){
-        return animalSoundMap.get(animalNumber);
+    public Sound[] getAnimalSound(Integer animalNumber){
+        return new Sound[]{animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL),
+                animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL + 1),
+                animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL + 2),
+                animalSoundMap.get(animalNumber * ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL + 3)};
     }
 
     private void loadMainMenuGraphics() {
@@ -234,7 +240,9 @@ public class ResourcesManager {
     }
 
     public void unloadGameTextures() {
-        gameTextureAtlas.unload();
+        for(BuildableBitmapTextureAtlas atlas : gameTextureAtlasList){
+            atlas.unload();
+        }
     }
 
     public void unloadMenuTextures() {
@@ -286,10 +294,6 @@ public class ResourcesManager {
         return menuBackgroundTextureRegion;
     }
 
-    public ITextureRegion getWaterTextureRegion() {
-        return waterTextureRegion;
-    }
-
     public ITextureRegion getAboutTextureRegion() {
         return aboutTextureRegion;
     }
@@ -312,5 +316,9 @@ public class ResourcesManager {
 
     public Font getBlackFont() {
         return blackFont;
+    }
+
+    public ITiledTextureRegion getAnimalTexture(Integer animalID) {
+        return animalTextureRegionMap.get(animalID);
     }
 }

@@ -3,27 +3,26 @@ package com.brekol.model.shape;
 import com.brekol.manager.ResourcesManager;
 import com.brekol.pool.AnimalPool;
 import com.brekol.util.AnimalPosition;
+import com.brekol.util.ConstantsUtil;
 import org.andengine.audio.sound.Sound;
-import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.input.touch.TouchEvent;
 
 /**
  * User: Breku
  * Date: 24.09.13
  */
-public class Animal extends Sprite {
+public class Animal extends AnimatedSprite {
 
-    // TODO add sounds
-
-    private Sound animalSound;
+    private Sound[] animalSound = new Sound[ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL];
     private boolean isClicked = false;
 
 
-    public Animal(AnimalPosition animalPosition, Integer animalNumber) {
+    public Animal(AnimalPosition animalPosition, Integer animalID) {
         super(animalPosition.getX(), animalPosition.getY(),
-                ResourcesManager.getInstance().getAnimalTexture(animalNumber),
+                ResourcesManager.getInstance().getAnimalTexture(animalID),
                 ResourcesManager.getInstance().getVertexBufferObjectManager());
-        animalSound = ResourcesManager.getInstance().getAnimalSound(animalNumber);
+        animalSound = ResourcesManager.getInstance().getAnimalSound(animalID);
     }
 
     @Override
@@ -37,7 +36,9 @@ public class Animal extends Sprite {
             switch (pSceneTouchEvent.getAction()){
                 case TouchEvent.ACTION_UP:
                     isClicked = true;
-                    animalSound.play();
+                    animalSound[0].play();
+
+                    this.setCurrentTileIndex((this.getCurrentTileIndex()+1)%this.getTileCount());
                     isClicked = false;
                     return true;
             }
