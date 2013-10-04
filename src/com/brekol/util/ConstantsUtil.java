@@ -17,6 +17,7 @@ public class ConstantsUtil implements Constants, LevelConstants {
 
     public static final int NUMBER_OF_ANIMALS = 25;
     public static final int NUMBER_OF_SOUNDS_PER_ANIMAL = 4;
+    public static final int NUMBER_OF_ANIMALS_ON_THE_GAME_SCENE = 6;
 
     public static final String TAG_ANIMAL = "animal";
 

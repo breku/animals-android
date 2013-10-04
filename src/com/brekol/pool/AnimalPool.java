@@ -18,7 +18,8 @@ public class AnimalPool extends GenericPool<Animal> {
     private static final AnimalPool INSTANCE = new AnimalPool();
     private int counter = 0;
     private Random random = new Random();
-    private List<Integer> currentAnimalIDs = new ArrayList<Integer>();
+    private List<Integer> animalIDs = new ArrayList<Integer>();
+    private AnimalPosition animalPosition = AnimalPosition.F;
 
     private AnimalPool() {
     }
@@ -50,11 +51,11 @@ public class AnimalPool extends GenericPool<Animal> {
     private Integer getNewAnimalID() {
         Integer result = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS);
 
-        while (currentAnimalIDs.contains(result)) {
+        while (animalIDs.contains(result)) {
             result = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS);
         }
 
-        currentAnimalIDs.add(result);
+        animalIDs.add(result);
         return result;
     }
 
@@ -64,9 +65,8 @@ public class AnimalPool extends GenericPool<Animal> {
     @Override
     protected void onHandleRecycleItem(Animal pItem) {
         pItem.reset();
-        pItem.setCurrentTileIndex(0);
         if (getAvailableItemCount() == ConstantsUtil.NUMBER_OF_ANIMALS) {
-            currentAnimalIDs.clear();
+            animalIDs.clear();
         }
         super.onHandleRecycleItem(pItem);
     }
@@ -78,7 +78,9 @@ public class AnimalPool extends GenericPool<Animal> {
      */
     @Override
     protected void onHandleObtainItem(Animal pItem) {
-        super.onHandleObtainItem(pItem);
+        animalPosition = animalPosition.nextPosition();
+        pItem.setPosition(animalPosition.getX(), animalPosition.getY());
+        pItem.setCurrentTileIndex((pItem.getCurrentTileIndex() + 1) % pItem.getTileCount());
     }
 
     public static AnimalPool getInstance() {

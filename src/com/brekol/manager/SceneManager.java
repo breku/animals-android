@@ -16,7 +16,7 @@ public class SceneManager {
     private static final SceneManager INSTANCE = new SceneManager();
 
     private SceneType currentSceneType = SceneType.SPLASH;
-    private BaseScene gameScene, menuScene, loadingScene, splashScene, currentScene, aboutScene, optionsScene;
+    private BaseScene gameScene, menuScene, loadingScene, splashScene, currentScene, aboutScene, optionsScene, endGameScene;
 
     public static SceneManager getInstance() {
         return INSTANCE;
@@ -48,6 +48,9 @@ public class SceneManager {
                 break;
             case OPTIONS:
                 setScene(optionsScene);
+                break;
+            case ENDGAME:
+                setScene(endGameScene);
                 break;
             default:
                 break;
@@ -85,6 +88,10 @@ public class SceneManager {
             case OPTIONS:
                 ResourcesManager.getInstance().unloadOptionsTextures();
                 optionsScene.disposeScene();
+                break;
+            case ENDGAME:
+                ResourcesManager.getInstance().unloadEndGameTextures();
+                endGameScene.disposeScene();
                 break;
 
         }
@@ -124,6 +131,14 @@ public class SceneManager {
                 setScene(aboutScene);
             }
         }));
+    }
+
+    public void loadEndGameScene() {
+        ResourcesManager.getInstance().loadEndGameResources();
+        endGameScene = new EndGameScene();
+        setScene(endGameScene);
+        gameScene.disposeScene();
+        ResourcesManager.getInstance().unloadGameTextures();
     }
 
     public void loadOptionsScene() {

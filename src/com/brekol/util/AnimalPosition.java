@@ -20,6 +20,10 @@ public enum AnimalPosition {
         this.y = y;
     }
 
+    public AnimalPosition nextPosition() {
+        return values()[(this.ordinal() + 1) % values().length];
+    }
+
 
     public int getX() {
         return x;

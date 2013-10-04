@@ -18,7 +18,9 @@ public class Animal extends AnimatedSprite {
 
     private Sound[] animalSound = new Sound[ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL];
     private boolean isClicked = false;
+    private boolean isSoundPlayed = false;
     private Random random = new Random();
+    private Integer soundID;
 
 
     public Animal(AnimalPosition animalPosition, Integer animalID) {
@@ -26,6 +28,7 @@ public class Animal extends AnimatedSprite {
                 ResourcesManager.getInstance().getAnimalTexture(animalID),
                 ResourcesManager.getInstance().getVertexBufferObjectManager());
         animalSound = ResourcesManager.getInstance().getAnimalSound(animalID);
+        soundID = random.nextInt(ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL);
     }
 
     @Override
@@ -39,15 +42,32 @@ public class Animal extends AnimatedSprite {
             switch (pSceneTouchEvent.getAction()) {
                 case TouchEvent.ACTION_UP:
                     isClicked = true;
-                    animalSound[random.nextInt(ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL)].play();
-
-                    this.setCurrentTileIndex((this.getCurrentTileIndex() + 1) % this.getTileCount());
-                    isClicked = false;
                     return true;
             }
 
         }
         return false;
+    }
 
+
+    public void playMusic() {
+        isSoundPlayed = true;
+        animalSound[soundID].play();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        isClicked = false;
+        isSoundPlayed = false;
+        soundID = random.nextInt(ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL);
+    }
+
+    public boolean isSoundPlayed() {
+        return isSoundPlayed;
+    }
+
+    public boolean isClicked() {
+        return isClicked;
     }
 }
