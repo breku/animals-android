@@ -9,10 +9,13 @@ import com.brekol.matcher.ClassTouchAreaMacher;
 import com.brekol.model.shape.Animal;
 import com.brekol.pool.AnimalPool;
 import com.brekol.service.AnimalService;
+import com.brekol.service.ChangeColorService;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.LevelType;
 import com.brekol.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -36,7 +39,7 @@ public class GameScene extends BaseScene {
 
     private HUD gameHUD;
     private Text scoreText;
-    private int score;
+    private Integer score;
     private SimpleLevelLoader levelLoader;
     private EntityLoader mainLevelLoader;
     private EntityLoader animalLoader;
@@ -45,6 +48,9 @@ public class GameScene extends BaseScene {
     private Integer animalID;
     private List<Animal> animalList;
     private AnimalService animalService;
+    private ChangeColorService changeColorService;
+    private int firstRunCounter = 0;
+    private IEntity bottomWhiteRectangle;
 
     @Override
     public void createScene() {
@@ -57,9 +63,10 @@ public class GameScene extends BaseScene {
     private void init() {
         clearUpdateHandlers();
         clearTouchAreas();
-        if(AnimalPool.getInstance().getAvailableItemCount() != ConstantsUtil.NUMBER_OF_ANIMALS){
+        if (AnimalPool.getInstance().getAvailableItemCount() != ConstantsUtil.NUMBER_OF_ANIMALS) {
             AnimalPool.getInstance().batchAllocatePoolItems(ConstantsUtil.NUMBER_OF_ANIMALS);
         }
+        changeColorService = new ChangeColorService();
         animalService = new AnimalService();
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
         animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_ANIMAL);
@@ -69,16 +76,17 @@ public class GameScene extends BaseScene {
         levelLoader.registerEntityLoader(animalLoader);
 
         random = new Random();
+        score = 0;
     }
 
     private void loadLevel(int levelID) {
         unregisterTouchAreas(new ClassTouchAreaMacher(Animal.class));
         detachAnimals();
+        firstRunCounter = 0;
         AnimalPool.getInstance().shufflePoolItems();
         animalID = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS_ON_THE_GAME_SCENE);
         levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");
         animalList = animalService.getCurrentAnimals(mChildren);
-        animalService.playAnimalSound(animalList, animalID);
     }
 
     private void createHUD() {
@@ -93,6 +101,9 @@ public class GameScene extends BaseScene {
     private void createBackground() {
         unregisterTouchAreas(new ClassTouchAreaMacher(Sprite.class));
         setBackground(new Background(Color.WHITE));
+        bottomWhiteRectangle = new Rectangle(ConstantsUtil.SCREEN_WIDTH / 2, 40, ConstantsUtil.SCREEN_WIDTH, 80, vertexBufferObjectManager);
+        bottomWhiteRectangle.setColor(Color.WHITE);
+        attachChild(bottomWhiteRectangle);
         createReplayButton();
     }
 
@@ -113,27 +124,31 @@ public class GameScene extends BaseScene {
 
     }
 
-    private void addToScore() {
-        score++;
-        scoreText.setText("Score: " + score);
-    }
-
-
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
+
         if (isBackKeyPressed) {
             loadMainMenuScene();
         }
+
+        if (firstRunCounter++ == 1) {
+            animalService.playAnimalSound(animalList, animalID);
+        }
+
         Animal clickedAnimal = animalService.getClickedAnimal(animalList);
         if (clickedAnimal != null) {
             if (clickedAnimal == animalService.getPlayedAnimal(animalList)) {
                 animalService.good();
+                animalService.stopSound(animalList);
+                score = animalService.addToScore(score, scoreText);
+                changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);
                 loadLevel(LevelType.EASY.getID());
+
             } else {
                 animalService.fail();
-                loadLevel(LevelType.EASY.getID());
-//                SceneManager.getInstance().loadEndGameScene();
+                detachAnimals();
+                SceneManager.getInstance().loadEndGameScene();
             }
         }
     }

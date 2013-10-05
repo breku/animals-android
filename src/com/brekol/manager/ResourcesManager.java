@@ -72,6 +72,7 @@ public class ResourcesManager {
         loadGameGraphics();
         loadGameFonts();
         loadGameMusic();
+        loadEndGameResources();
     }
 
     public void loadEndGameResources() {

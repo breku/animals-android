@@ -49,6 +49,9 @@ public class Animal extends AnimatedSprite {
         return false;
     }
 
+    public void stopMusic() {
+        animalSound[soundID].stop();
+    }
 
     public void playMusic() {
         isSoundPlayed = true;

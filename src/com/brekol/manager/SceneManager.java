@@ -134,7 +134,6 @@ public class SceneManager {
     }
 
     public void loadEndGameScene() {
-        ResourcesManager.getInstance().loadEndGameResources();
         endGameScene = new EndGameScene();
         setScene(endGameScene);
         gameScene.disposeScene();
