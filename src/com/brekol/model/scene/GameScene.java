@@ -57,7 +57,9 @@ public class GameScene extends BaseScene {
     private void init() {
         clearUpdateHandlers();
         clearTouchAreas();
-        AnimalPool.getInstance().batchAllocatePoolItems(ConstantsUtil.NUMBER_OF_ANIMALS);
+        if(AnimalPool.getInstance().getAvailableItemCount() != ConstantsUtil.NUMBER_OF_ANIMALS){
+            AnimalPool.getInstance().batchAllocatePoolItems(ConstantsUtil.NUMBER_OF_ANIMALS);
+        }
         animalService = new AnimalService();
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
         animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_ANIMAL);
