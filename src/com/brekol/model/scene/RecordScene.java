@@ -11,9 +11,9 @@ import org.andengine.input.touch.TouchEvent;
 
 /**
  * User: Breku
- * Date: 04.10.13
+ * Date: 06.10.13
  */
-public class EndGameScene extends BaseScene implements IOnSceneTouchListener {
+public class RecordScene extends BaseScene implements IOnSceneTouchListener {
 
     @Override
     public void createScene() {
@@ -22,18 +22,19 @@ public class EndGameScene extends BaseScene implements IOnSceneTouchListener {
     }
 
     private void createBackground() {
-        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2,
-                ResourcesManager.getInstance().getEndGameBackgroundTextureRegion(), vertexBufferObjectManager));
+        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH/2,ConstantsUtil.SCREEN_HEIGHT/2,
+                ResourcesManager.getInstance().getRecordBackgroundTextureRegion(),vertexBufferObjectManager));
+
     }
 
     @Override
     public void onBackKeyPressed() {
-        SceneManager.getInstance().loadMenuSceneFrom(SceneType.ENDGAME);
+        SceneManager.getInstance().loadMenuSceneFrom(SceneType.RECORDS);
     }
 
     @Override
     public SceneType getSceneType() {
-        return SceneType.ENDGAME;
+        return SceneType.RECORDS;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class EndGameScene extends BaseScene implements IOnSceneTouchListener {
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionUp()) {
-            SceneManager.getInstance().loadMenuSceneFrom(SceneType.ENDGAME);
+            SceneManager.getInstance().loadMenuSceneFrom(SceneType.RECORDS);
         }
         return false;
     }

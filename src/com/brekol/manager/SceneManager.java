@@ -16,7 +16,8 @@ public class SceneManager {
     private static final SceneManager INSTANCE = new SceneManager();
 
     private SceneType currentSceneType = SceneType.SPLASH;
-    private BaseScene gameScene, menuScene, loadingScene, splashScene, currentScene, aboutScene, optionsScene, endGameScene;
+    private BaseScene gameScene, menuScene, loadingScene, splashScene, currentScene,
+            aboutScene, optionsScene, endGameScene, recordScene;
 
     public static SceneManager getInstance() {
         return INSTANCE;
@@ -93,7 +94,10 @@ public class SceneManager {
                 ResourcesManager.getInstance().unloadEndGameTextures();
                 endGameScene.disposeScene();
                 break;
-
+            case RECORDS:
+                ResourcesManager.getInstance().unloadRecordsTextures();
+                recordScene.disposeScene();
+                break;
         }
         ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME, new ITimerCallback() {
             @Override
@@ -131,6 +135,29 @@ public class SceneManager {
                 setScene(aboutScene);
             }
         }));
+    }
+
+    public void loadRecordsSceneFrom(SceneType sceneType){
+        switch (sceneType){
+            case MENU:
+                setScene(loadingScene);
+                ResourcesManager.getInstance().unloadMenuTextures();
+                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 2, new ITimerCallback() {
+                    @Override
+                    public void onTimePassed(TimerHandler pTimerHandler) {
+                        ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
+                        ResourcesManager.getInstance().loadRecordResources();
+                        recordScene = new RecordScene();
+                        setScene(recordScene);
+                    }
+                }));
+                break;
+            case ENDGAME:
+                ResourcesManager.getInstance().loadRecordResources();
+                recordScene = new RecordScene();
+                setScene(recordScene);
+        }
+
     }
 
     public void loadEndGameScene() {
