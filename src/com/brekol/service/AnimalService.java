@@ -13,7 +13,7 @@ import java.util.List;
  * User: Breku
  * Date: 04.10.13
  */
-public class AnimalService {
+public class AnimalService extends BaseService{
 
 
     public List<Animal> getCurrentAnimals(Collection<IEntity> mChildren) {
