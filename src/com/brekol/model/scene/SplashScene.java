@@ -14,7 +14,7 @@ public class SplashScene extends BaseScene {
     private Sprite sprite;
 
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         sprite = new Sprite(0, 0, resourcesManager.getSplashTextureRegion(), vertexBufferObjectManager) {
             @Override
             protected void preDraw(GLState pGLState, Camera pCamera) {

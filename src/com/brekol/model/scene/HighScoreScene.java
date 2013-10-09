@@ -2,6 +2,7 @@ package com.brekol.model.scene;
 
 import com.brekol.manager.ResourcesManager;
 import com.brekol.manager.SceneManager;
+import com.brekol.model.util.HighScore;
 import com.brekol.service.HighScoresService;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.GameType;
@@ -22,11 +23,20 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
     HighScoresService highScoresService;
 
+    /**
+     * Constructor
+     *
+     * @param objects object[0] - HighScore
+     */
+    public HighScoreScene(Object... objects) {
+        super(objects);
+    }
+
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         init();
         createBackground();
-        createRecordsTable();
+        createRecordsTable(objects);
 
         setOnSceneTouchListener(this);
     }
@@ -35,13 +45,24 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
         highScoresService = new HighScoresService();
     }
 
-    private void createRecordsTable() {
-        createHighscoresFor(GameType.CLASSIC, 200);
-        createHighscoresFor(GameType.HALFMARATHON, 400);
-        createHighscoresFor(GameType.MARATHON, 600);
+    private void createRecordsTable(Object... objects) {
+
+        if (objects.length == 0) {
+            createHighscoresFor(GameType.CLASSIC, 200, null);
+            createHighscoresFor(GameType.HALFMARATHON, 400, null);
+            createHighscoresFor(GameType.MARATHON, 600, null);
+        } else {
+            HighScore highScore = (HighScore) objects[0];
+            createHighscoresFor(GameType.CLASSIC, 200, highScore);
+            createHighscoresFor(GameType.HALFMARATHON, 400, highScore);
+            createHighscoresFor(GameType.MARATHON, 600, highScore);
+        }
+
     }
 
-    private void createHighscoresFor(GameType gameType, int x) {
+    private void createHighscoresFor(GameType gameType, int x, HighScore highScore) {
+
+        // Top captions
         if (gameType == GameType.HALFMARATHON) {
             attachChild(new Text(x, 370, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
         } else {
@@ -49,10 +70,16 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
         }
 
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
-
         for (int i = 0; i < 3; i++) {
-            attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
-                    highScores.get(i).toString(), vertexBufferObjectManager));
+            if (highScore != null && highScores.get(i).equals(highScore.getScore()) && gameType == highScore.getGameType()) {
+                attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getGreenFont(),
+                        highScores.get(i).toString(), vertexBufferObjectManager));
+            } else {
+                attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+                        highScores.get(i).toString(), vertexBufferObjectManager));
+
+            }
+
         }
     }
 

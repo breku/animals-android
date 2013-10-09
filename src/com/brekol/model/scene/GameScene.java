@@ -7,6 +7,7 @@ import com.brekol.manager.SceneManager;
 import com.brekol.matcher.ClassIEntityMatcher;
 import com.brekol.matcher.ClassTouchAreaMacher;
 import com.brekol.model.shape.Animal;
+import com.brekol.model.util.HighScore;
 import com.brekol.pool.AnimalPool;
 import com.brekol.service.AnimalService;
 import com.brekol.service.ChangeColorService;
@@ -57,21 +58,23 @@ public class GameScene extends BaseScene {
     private GameType currentGameType;
     private long startTime;
 
-    public GameScene(GameType gameType) {
-        super();
-        currentGameType = gameType;
+    /**
+     * @param objects objects[0] - GameType
+     */
+    public GameScene(Object... objects) {
+        super(objects);
     }
 
 
     @Override
-    public void createScene() {
-        init();
+    public void createScene(Object... objects) {
+        init(objects);
         createBackground();
         createHUD();
         loadLevel(LevelType.EASY.getID());
     }
 
-    private void init() {
+    private void init(Object... objects) {
         clearUpdateHandlers();
         clearTouchAreas();
         if (AnimalPool.getInstance().getAvailableItemCount() != ConstantsUtil.NUMBER_OF_ANIMALS) {
@@ -91,6 +94,7 @@ public class GameScene extends BaseScene {
         random = new Random();
         numberOfGuessedAnimals = 0;
         firstRunCounter = 0;
+        currentGameType = (GameType) objects[0];
     }
 
     private void loadLevel(int levelID) {
@@ -165,11 +169,12 @@ public class GameScene extends BaseScene {
 
                 if (numberOfGuessedAnimals == currentGameType.getNumberOfAnimas()) {
                     float score = (System.currentTimeMillis() - startTime) / 1000.0f;
-                    if (highScoresService.isRecord(score, currentGameType)) {
-                        highScoresService.addNewRecord(score, currentGameType);
+                    HighScore highScore = new HighScore(score, currentGameType);
+                    if (highScoresService.isRecord(highScore)) {
+                        highScoresService.addNewRecord(highScore);
                     }
                     detachAnimals();
-                    SceneManager.getInstance().loadRecordsSceneFrom(SceneType.GAME);
+                    SceneManager.getInstance().loadHighScoreSceneFrom(SceneType.GAME, highScore);
 
                 } else {
                     changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);

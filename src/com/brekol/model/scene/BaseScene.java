@@ -20,17 +20,17 @@ public abstract class BaseScene extends Scene {
     protected VertexBufferObjectManager vertexBufferObjectManager;
     protected Camera camera;
 
-    public BaseScene() {
+    public BaseScene(Object... objects) {
         this.resourcesManager = ResourcesManager.getInstance();
         this.engine = resourcesManager.getEngine();
         this.activity = resourcesManager.getActivity();
         this.vertexBufferObjectManager = resourcesManager.getVertexBufferObjectManager();
         this.camera = resourcesManager.getCamera();
-        createScene();
+        createScene(objects);
     }
 
 
-    public abstract void createScene();
+    public abstract void createScene(Object... objects);
 
     public abstract void onBackKeyPressed();
 

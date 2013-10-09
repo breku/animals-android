@@ -10,8 +10,9 @@ import org.andengine.entity.sprite.Sprite;
  * Date: 21.09.13
  */
 public class OptionsScene extends BaseScene {
+
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         createBackground();
     }
 

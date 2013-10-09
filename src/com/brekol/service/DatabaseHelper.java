@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_GAME_TYPE = "GAME_TYPE";
     private static final String COLUMN_SCORE = "SCORE";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
 
     public DatabaseHelper(Context context) {
@@ -90,9 +90,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery("SELECT " + COLUMN_SCORE + " FROM " + TABLE_NAME + " WHERE " + COLUMN_GAME_TYPE + " = ?", new String[]{gameType.toString()});
         while (cursor.moveToNext()) {
             if (score < cursor.getLong(0)) {
+                cursor.close();
                 return true;
             }
         }
+        cursor.close();
         return false;
     }
 
@@ -113,6 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (isTableExists(sqLiteDatabase, TABLE_NAME)) {
             Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + COLUMN_SCORE + " FROM " + TABLE_NAME, new String[]{});
             if (cursor.getCount() == 9) {
+                cursor.close();
                 return;
             }
         }
@@ -140,13 +143,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
-
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, new String[]{});
-        while (cursor.moveToNext()) {
-            System.out.println(cursor.getColumnCount());
-        }
-
-
     }
 
 }

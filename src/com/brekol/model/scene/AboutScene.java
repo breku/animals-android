@@ -15,7 +15,7 @@ import org.andengine.input.touch.TouchEvent;
 public class AboutScene extends BaseScene implements IOnSceneTouchListener {
 
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         createBackground();
         setOnSceneTouchListener(this);
     }

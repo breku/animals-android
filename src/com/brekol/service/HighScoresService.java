@@ -1,5 +1,6 @@
 package com.brekol.service;
 
+import com.brekol.model.util.HighScore;
 import com.brekol.util.GameType;
 
 import java.util.List;
@@ -16,13 +17,13 @@ public class HighScoresService extends BaseService {
         return databaseHelper.getHighScoresFor(gameType);
     }
 
-    public boolean isRecord(float score, GameType gameType) {
-        return databaseHelper.isRecord(score, gameType);
+    public boolean isRecord(HighScore highScore) {
+        return databaseHelper.isRecord(highScore.getScore(), highScore.getGameType());
     }
 
-    public void addNewRecord(float score, GameType gameType) {
-        databaseHelper.removeLastResult(gameType);
-        databaseHelper.addToHighScores(gameType, score);
+    public void addNewRecord(HighScore highScore) {
+        databaseHelper.removeLastResult(highScore.getGameType());
+        databaseHelper.addToHighScores(highScore.getGameType(), highScore.getScore());
     }
 
 }

@@ -24,7 +24,7 @@ public class GameTypeScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
 
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         createBackground();
         createButtons();
     }

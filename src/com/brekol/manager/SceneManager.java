@@ -1,6 +1,7 @@
 package com.brekol.manager;
 
 import com.brekol.model.scene.*;
+import com.brekol.model.util.HighScore;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.GameType;
 import com.brekol.util.SceneType;
@@ -121,7 +122,7 @@ public class SceneManager {
         }));
     }
 
-    public void loadRecordsSceneFrom(SceneType sceneType) {
+    public void loadHighScoreSceneFrom(SceneType sceneType, final HighScore highScore) {
         switch (sceneType) {
             case MENU:
                 setScene(loadingScene);
@@ -144,7 +145,7 @@ public class SceneManager {
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
                         ResourcesManager.getInstance().loadRecordResources();
-                        recordScene = new HighScoreScene();
+                        recordScene = new HighScoreScene(highScore);
                         setScene(recordScene);
                     }
                 }));
@@ -153,6 +154,7 @@ public class SceneManager {
                 ResourcesManager.getInstance().loadRecordResources();
                 recordScene = new HighScoreScene();
                 setScene(recordScene);
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

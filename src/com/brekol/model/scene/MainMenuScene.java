@@ -24,7 +24,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
 
     @Override
-    public void createScene() {
+    public void createScene(Object... objects) {
         createBackground();
         createButtons();
     }
@@ -94,7 +94,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
             case EXIT:
                 System.exit(0);
             case RECORDS:
-                SceneManager.getInstance().loadRecordsSceneFrom(SceneType.MENU);
+                SceneManager.getInstance().loadHighScoreSceneFrom(SceneType.MENU, null);
                 break;
             default:
                 return false;
