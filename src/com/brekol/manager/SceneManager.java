@@ -87,7 +87,7 @@ public class SceneManager {
         }));
     }
 
-    public void loadGameTypeScene(){
+    public void loadGameTypeScene() {
         gameTypeScene = new GameTypeScene();
         setScene(gameTypeScene);
         ResourcesManager.getInstance().unloadMenuTextures();
@@ -121,8 +121,8 @@ public class SceneManager {
         }));
     }
 
-    public void loadRecordsSceneFrom(SceneType sceneType){
-        switch (sceneType){
+    public void loadRecordsSceneFrom(SceneType sceneType) {
+        switch (sceneType) {
             case MENU:
                 setScene(loadingScene);
                 ResourcesManager.getInstance().unloadMenuTextures();

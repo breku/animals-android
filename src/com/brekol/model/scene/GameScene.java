@@ -163,15 +163,15 @@ public class GameScene extends BaseScene {
                 animalService.stopSound(animalList);
                 numberOfGuessedAnimals++;
 
-                if(numberOfGuessedAnimals == currentGameType.getNumberOfAnimas()){
+                if (numberOfGuessedAnimals == currentGameType.getNumberOfAnimas()) {
                     float score = (System.currentTimeMillis() - startTime) / 1000.0f;
-                    if(highScoresService.isRecord(score,currentGameType)){
-                        highScoresService.addNewRecord(score,currentGameType);
+                    if (highScoresService.isRecord(score, currentGameType)) {
+                        highScoresService.addNewRecord(score, currentGameType);
                     }
                     detachAnimals();
                     SceneManager.getInstance().loadRecordsSceneFrom(SceneType.GAME);
 
-                }else {
+                } else {
                     changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);
                     loadLevel(LevelType.EASY.getID());
                 }

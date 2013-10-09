@@ -86,25 +86,25 @@ public class ResourcesManager {
         loadRecordGraphics();
     }
 
-    public void loadGameTypeResources(){
+    public void loadGameTypeResources() {
         loadGameTypeGraphics();
     }
 
     private void loadGameTypeGraphics() {
-        if(gameTypeTextureAtlas != null){
+        if (gameTypeTextureAtlas != null) {
             gameTypeTextureAtlas.load();
         }
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/gametype/");
         gameTypeTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 
-        backgroundGameTypeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas,activity,"background.jpg");
-        buttonClassicGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas,activity,"classicButton.png");
-        buttonHalfmarathonGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas,activity,"halfmarathonButton.png");
-        buttonMarathonGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas,activity,"marathonButton.png");
+        backgroundGameTypeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas, activity, "background.jpg");
+        buttonClassicGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas, activity, "classicButton.png");
+        buttonHalfmarathonGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas, activity, "halfmarathonButton.png");
+        buttonMarathonGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTypeTextureAtlas, activity, "marathonButton.png");
 
         try {
-            gameTypeTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0,0,0));
+            gameTypeTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
             gameTypeTextureAtlas.load();
         } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
             e.printStackTrace();
@@ -325,7 +325,7 @@ public class ResourcesManager {
         recordTextureAtlas.unload();
     }
 
-    public void unloadGameTypeTextures(){
+    public void unloadGameTypeTextures() {
         gameTypeTextureAtlas.unload();
     }
 

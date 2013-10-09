@@ -36,22 +36,22 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
     }
 
     private void createRecordsTable() {
-        createHighscoresFor(GameType.CLASSIC,200);
-        createHighscoresFor(GameType.HALFMARATHON,400);
-        createHighscoresFor(GameType.MARATHON,600);
+        createHighscoresFor(GameType.CLASSIC, 200);
+        createHighscoresFor(GameType.HALFMARATHON, 400);
+        createHighscoresFor(GameType.MARATHON, 600);
     }
 
-    private void createHighscoresFor(GameType gameType, int x){
-        if(gameType == GameType.HALFMARATHON){
-            attachChild(new Text(x,370,ResourcesManager.getInstance().getWhiteFont(),gameType.toString(),vertexBufferObjectManager));
-        }else {
-            attachChild(new Text(x,440,ResourcesManager.getInstance().getWhiteFont(),gameType.toString(),vertexBufferObjectManager));
+    private void createHighscoresFor(GameType gameType, int x) {
+        if (gameType == GameType.HALFMARATHON) {
+            attachChild(new Text(x, 370, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
+        } else {
+            attachChild(new Text(x, 440, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
         }
 
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
 
         for (int i = 0; i < 3; i++) {
-            attachChild(new Text(x, 300 - i * 100,ResourcesManager.getInstance().getWhiteFont(),
+            attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
                     highScores.get(i).toString(), vertexBufferObjectManager));
         }
     }

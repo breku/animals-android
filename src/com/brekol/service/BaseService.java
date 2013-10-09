@@ -14,7 +14,7 @@ public abstract class BaseService {
     protected Activity activity;
     protected ResourcesManager resourcesManager;
 
-    public BaseService(){
+    public BaseService() {
         this.resourcesManager = ResourcesManager.getInstance();
         this.engine = resourcesManager.getEngine();
         this.activity = resourcesManager.getActivity();

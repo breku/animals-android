@@ -8,7 +8,7 @@ public enum GameType {
     CLASSIC(10), HALFMARATHON(21), MARATHON(42);
     int numberOfAnimas;
 
-    GameType(int numberOfAnimals){
+    GameType(int numberOfAnimals) {
         this.numberOfAnimas = numberOfAnimals;
     }
 

@@ -49,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Is called when DATABASE_VERSION is upgraded
+     *
      * @param sqLiteDatabase
      * @param i
      * @param i1
@@ -75,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_GAME_TYPE, gameType.toString());
         values.put(COLUMN_SCORE, score);
-        database.insert(TABLE_NAME,null,values);
+        database.insert(TABLE_NAME, null, values);
     }
 
     public void removeLastResult(GameType gameType) {
@@ -140,8 +141,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME,new String[]{});
-        while (cursor.moveToNext()){
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, new String[]{});
+        while (cursor.moveToNext()) {
             System.out.println(cursor.getColumnCount());
         }
 

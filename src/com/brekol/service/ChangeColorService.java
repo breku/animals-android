@@ -12,7 +12,7 @@ import org.andengine.util.adt.color.Color;
  * User: Breku
  * Date: 05.10.13
  */
-public class ChangeColorService extends BaseService{
+public class ChangeColorService extends BaseService {
 
     public void changeBackgroundColorFromToAndBack(final IBackground background, final Color c1, final Color c2) {
         background.clearBackgroundModifiers();

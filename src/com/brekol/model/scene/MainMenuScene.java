@@ -56,7 +56,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         aboutItem.setPosition(600, 360);
 //        optionsItem.setPosition(ConstantsUtil.SCREEN_WIDTH * 2 / 3, ConstantsUtil.SCREEN_HEIGHT * 3 / 4);
         exitItem.setPosition(600, 160);
-        recordsItem.setPosition(200,160);
+        recordsItem.setPosition(200, 160);
 
         menuScene.setOnMenuItemClickListener(this);
 
