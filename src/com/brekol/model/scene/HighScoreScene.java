@@ -2,8 +2,9 @@ package com.brekol.model.scene;
 
 import com.brekol.manager.ResourcesManager;
 import com.brekol.manager.SceneManager;
-import com.brekol.service.RecordsService;
+import com.brekol.service.HighScoresService;
 import com.brekol.util.ConstantsUtil;
+import com.brekol.util.GameType;
 import com.brekol.util.SceneType;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -11,17 +12,15 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * User: Breku
  * Date: 06.10.13
  */
-public class RecordScene extends BaseScene implements IOnSceneTouchListener {
+public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
-    List<Integer> recordList;
-    RecordsService recordsService;
+    HighScoresService highScoresService;
 
     @Override
     public void createScene() {
@@ -33,16 +32,27 @@ public class RecordScene extends BaseScene implements IOnSceneTouchListener {
     }
 
     private void init() {
-        recordList = new ArrayList<Integer>();
-        recordsService = new RecordsService();
+        highScoresService = new HighScoresService();
     }
 
     private void createRecordsTable() {
-        recordList = recordsService.getSortedRecordsList();
+        createHighscoresFor(GameType.CLASSIC,200);
+        createHighscoresFor(GameType.HALFMARATHON,400);
+        createHighscoresFor(GameType.MARATHON,600);
+    }
+
+    private void createHighscoresFor(GameType gameType, int x){
+        if(gameType == GameType.HALFMARATHON){
+            attachChild(new Text(x,370,ResourcesManager.getInstance().getWhiteFont(),gameType.toString(),vertexBufferObjectManager));
+        }else {
+            attachChild(new Text(x,440,ResourcesManager.getInstance().getWhiteFont(),gameType.toString(),vertexBufferObjectManager));
+        }
+
+        List<Float> highScores = highScoresService.getHighScoresFor(gameType);
 
         for (int i = 0; i < 3; i++) {
-            attachChild(new Text(ConstantsUtil.SCREEN_WIDTH / 2, 300 - i * 100,
-                    ResourcesManager.getInstance().getWhiteFont(), recordList.get(i).toString(), vertexBufferObjectManager));
+            attachChild(new Text(x, 300 - i * 100,ResourcesManager.getInstance().getWhiteFont(),
+                    highScores.get(i).toString(), vertexBufferObjectManager));
         }
     }
 

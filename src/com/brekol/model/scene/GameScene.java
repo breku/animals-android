@@ -10,7 +10,9 @@ import com.brekol.model.shape.Animal;
 import com.brekol.pool.AnimalPool;
 import com.brekol.service.AnimalService;
 import com.brekol.service.ChangeColorService;
+import com.brekol.service.HighScoresService;
 import com.brekol.util.ConstantsUtil;
+import com.brekol.util.GameType;
 import com.brekol.util.LevelType;
 import com.brekol.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
@@ -38,8 +40,8 @@ public class GameScene extends BaseScene {
 
 
     private HUD gameHUD;
-    private Text scoreText;
-    private Integer score;
+    private Text timeText;
+    private Integer numberOfGuessedAnimals;
     private SimpleLevelLoader levelLoader;
     private EntityLoader mainLevelLoader;
     private EntityLoader animalLoader;
@@ -48,9 +50,18 @@ public class GameScene extends BaseScene {
     private Integer animalID;
     private List<Animal> animalList;
     private AnimalService animalService;
+    private HighScoresService highScoresService;
     private ChangeColorService changeColorService;
     private int firstRunCounter = 0;
     private IEntity bottomWhiteRectangle;
+    private GameType currentGameType;
+    private long startTime;
+
+    public GameScene(GameType gameType) {
+        super();
+        currentGameType = gameType;
+    }
+
 
     @Override
     public void createScene() {
@@ -68,6 +79,8 @@ public class GameScene extends BaseScene {
         }
         changeColorService = new ChangeColorService();
         animalService = new AnimalService();
+        highScoresService = new HighScoresService();
+
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
         animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_ANIMAL);
         levelLoader = new SimpleLevelLoader(vertexBufferObjectManager);
@@ -76,25 +89,28 @@ public class GameScene extends BaseScene {
         levelLoader.registerEntityLoader(animalLoader);
 
         random = new Random();
-        score = 0;
+        numberOfGuessedAnimals = 0;
+        firstRunCounter = 0;
     }
 
     private void loadLevel(int levelID) {
         unregisterTouchAreas(new ClassTouchAreaMacher(Animal.class));
         detachAnimals();
-        firstRunCounter = 0;
         AnimalPool.getInstance().shufflePoolItems();
         animalID = random.nextInt(ConstantsUtil.NUMBER_OF_ANIMALS_ON_THE_GAME_SCENE);
         levelLoader.loadLevelFromAsset(activity.getAssets(), "level/" + levelID + ".lvl");
         animalList = animalService.getCurrentAnimals(mChildren);
+        if (firstRunCounter > 0) {
+            animalService.playAnimalSound(animalList, animalID);
+        }
     }
 
     private void createHUD() {
         gameHUD = new HUD();
-        scoreText = new Text(144, 40, resourcesManager.getBlackFont(), "Score: 999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
-        scoreText.setText("Score: 0");
 
-        gameHUD.attachChild(scoreText);
+        timeText = new Text(150, 40, resourcesManager.getBlackFont(), "Time: 999999999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
+
+        gameHUD.attachChild(timeText);
         camera.setHUD(gameHUD);
     }
 
@@ -108,7 +124,7 @@ public class GameScene extends BaseScene {
     }
 
     private void createReplayButton() {
-        Sprite replayButton = new Sprite(480, 40, ResourcesManager.getInstance().getButtonReplayTextureRegion(), vertexBufferObjectManager) {
+        Sprite replayButton = new Sprite(700, 40, ResourcesManager.getInstance().getButtonReplayTextureRegion(), vertexBufferObjectManager) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 switch (pSceneTouchEvent.getAction()) {
@@ -134,23 +150,45 @@ public class GameScene extends BaseScene {
 
         if (firstRunCounter++ == 1) {
             animalService.playAnimalSound(animalList, animalID);
+            startTime = System.currentTimeMillis();
         }
+
+        updateTime();
 
         Animal clickedAnimal = animalService.getClickedAnimal(animalList);
         if (clickedAnimal != null) {
             if (clickedAnimal == animalService.getPlayedAnimal(animalList)) {
+                // OK - next level
                 animalService.good();
                 animalService.stopSound(animalList);
-                score = animalService.addToScore(score, scoreText);
-                changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);
-                loadLevel(LevelType.EASY.getID());
+                numberOfGuessedAnimals++;
+
+                if(numberOfGuessedAnimals == currentGameType.getNumberOfAnimas()){
+                    float score = (System.currentTimeMillis() - startTime) / 1000.0f;
+                    if(highScoresService.isRecord(score,currentGameType)){
+                        highScoresService.addNewRecord(score,currentGameType);
+                    }
+                    detachAnimals();
+                    SceneManager.getInstance().loadRecordsSceneFrom(SceneType.GAME);
+
+                }else {
+                    changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);
+                    loadLevel(LevelType.EASY.getID());
+                }
+
 
             } else {
+                // FAIL
                 animalService.fail();
                 detachAnimals();
                 SceneManager.getInstance().loadEndGameScene();
             }
         }
+    }
+
+    private void updateTime() {
+        long elapsedTime = (System.currentTimeMillis() - startTime) / 10;
+        timeText.setText("Time:   " + elapsedTime / 100 + "." + elapsedTime % 100);
     }
 
     @Override

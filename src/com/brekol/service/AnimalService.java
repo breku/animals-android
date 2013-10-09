@@ -2,7 +2,6 @@ package com.brekol.service;
 
 import com.brekol.model.shape.Animal;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.text.Text;
 import org.andengine.util.debug.Debug;
 
 import java.util.ArrayList;
@@ -62,11 +61,5 @@ public class AnimalService extends BaseService{
     public void fail() {
         Debug.d("FAIL");
 
-    }
-
-    public Integer addToScore(Integer score, Text scoreText) {
-        score++;
-        scoreText.setText("Score: " + score);
-        return score;
     }
 }

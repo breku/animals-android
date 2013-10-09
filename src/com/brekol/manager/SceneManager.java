@@ -2,6 +2,7 @@ package com.brekol.manager;
 
 import com.brekol.model.scene.*;
 import com.brekol.util.ConstantsUtil;
+import com.brekol.util.GameType;
 import com.brekol.util.SceneType;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -17,7 +18,7 @@ public class SceneManager {
 
     private SceneType currentSceneType = SceneType.SPLASH;
     private BaseScene gameScene, menuScene, loadingScene, splashScene, currentScene,
-            aboutScene, optionsScene, endGameScene, recordScene;
+            aboutScene, optionsScene, endGameScene, recordScene, gameTypeScene;
 
     public static SceneManager getInstance() {
         return INSTANCE;
@@ -27,35 +28,6 @@ public class SceneManager {
         ResourcesManager.getInstance().getEngine().setScene(scene);
         currentScene = scene;
         currentSceneType = scene.getSceneType();
-    }
-
-
-    public void setScene(SceneType sceneType) {
-        switch (sceneType) {
-            case MENU:
-                setScene(menuScene);
-                break;
-            case GAME:
-                setScene(gameScene);
-                break;
-            case SPLASH:
-                setScene(splashScene);
-                break;
-            case LOADING:
-                setScene(loadingScene);
-                break;
-            case ABOUT:
-                setScene(aboutScene);
-                break;
-            case OPTIONS:
-                setScene(optionsScene);
-                break;
-            case ENDGAME:
-                setScene(endGameScene);
-                break;
-            default:
-                break;
-        }
     }
 
     public void createSplashScene(IGameInterface.OnCreateSceneCallback onCreateSceneCallback) {
@@ -68,6 +40,7 @@ public class SceneManager {
 
     public void createMainMenuScene() {
         ResourcesManager.getInstance().loadMainMenuResources();
+        ResourcesManager.getInstance().loadGameTypeResources();
         menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
         setScene(menuScene);
@@ -98,26 +71,37 @@ public class SceneManager {
                 ResourcesManager.getInstance().unloadRecordsTextures();
                 recordScene.disposeScene();
                 break;
+            case GAMETYPE:
+                ResourcesManager.getInstance().unloadGameTypeTextures();
+                gameTypeScene.disposeScene();
+                break;
         }
         ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuTextures();
+                ResourcesManager.getInstance().loadGameTypeResources();
                 setScene(menuScene);
             }
         }));
     }
 
-    public void loadGameScene() {
-        setScene(loadingScene);
+    public void loadGameTypeScene(){
+        gameTypeScene = new GameTypeScene();
+        setScene(gameTypeScene);
         ResourcesManager.getInstance().unloadMenuTextures();
+    }
+
+    public void loadGameScene(final GameType gameType) {
+        setScene(loadingScene);
+        ResourcesManager.getInstance().unloadGameTypeTextures();
         ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources();
-                gameScene = new GameScene();
+                gameScene = new GameScene(gameType);
                 setScene(gameScene);
             }
         }));
@@ -147,15 +131,30 @@ public class SceneManager {
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
                         ResourcesManager.getInstance().loadRecordResources();
-                        recordScene = new RecordScene();
+                        recordScene = new HighScoreScene();
+                        setScene(recordScene);
+                    }
+                }));
+                break;
+            case GAME:
+                setScene(loadingScene);
+                ResourcesManager.getInstance().unloadGameTextures();
+                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 2, new ITimerCallback() {
+                    @Override
+                    public void onTimePassed(TimerHandler pTimerHandler) {
+                        ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
+                        ResourcesManager.getInstance().loadRecordResources();
+                        recordScene = new HighScoreScene();
                         setScene(recordScene);
                     }
                 }));
                 break;
             case ENDGAME:
                 ResourcesManager.getInstance().loadRecordResources();
-                recordScene = new RecordScene();
+                recordScene = new HighScoreScene();
                 setScene(recordScene);
+            default:
+                throw new UnsupportedOperationException();
         }
 
     }
