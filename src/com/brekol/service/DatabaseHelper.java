@@ -22,13 +22,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_GAME_TYPE = "GAME_TYPE";
     private static final String COLUMN_SCORE = "SCORE";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
-
-
     }
 
     /**
@@ -68,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             result.add(cursor.getFloat(0));
         }
         Collections.sort(result);
+        cursor.close();
         return result;
     }
 
@@ -104,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[]{"table", tableName});
         if (!cursor.moveToFirst()) {
+            cursor.close();
             return false;
         }
         int count = cursor.getInt(0);

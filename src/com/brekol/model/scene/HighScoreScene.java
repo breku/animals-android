@@ -7,11 +7,16 @@ import com.brekol.service.HighScoresService;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.GameType;
 import com.brekol.util.SceneType;
+import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.FadeInModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.adt.color.Color;
 
 import java.util.List;
 
@@ -72,12 +77,17 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
         for (int i = 0; i < 3; i++) {
             if (highScore != null && highScores.get(i).equals(highScore.getScore()) && gameType == highScore.getGameType()) {
-                attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getGreenFont(),
-                        highScores.get(i).toString(), vertexBufferObjectManager));
+
+                Text text = new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+                        highScores.get(i).toString(), vertexBufferObjectManager);
+                text.registerEntityModifier(new ParallelEntityModifier(
+                        new RotationModifier(5.0f,0.0f,360.0f),
+                        new ColorModifier(5.0f, Color.WHITE,Color.GREEN),
+                        new FadeInModifier(10.0f)));
+                attachChild(text);
             } else {
                 attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
                         highScores.get(i).toString(), vertexBufferObjectManager));
-
             }
 
         }
