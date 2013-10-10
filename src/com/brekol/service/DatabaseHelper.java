@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_GAME_TYPE = "GAME_TYPE";
     private static final String COLUMN_SCORE = "SCORE";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 17;
 
 
     public DatabaseHelper(Context context) {
@@ -67,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         Collections.sort(result);
         cursor.close();
+        database.close();
         return result;
     }
 
@@ -76,11 +77,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_GAME_TYPE, gameType.toString());
         values.put(COLUMN_SCORE, score);
         database.insert(TABLE_NAME, null, values);
+        database.close();
     }
 
     public void removeLastResult(GameType gameType) {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL("DELETE FROM HIGH_SCORES WHERE ID = (SELECT ID FROM HIGH_SCORES WHERE GAME_TYPE = ? ORDER BY SCORE DESC LIMIT 1)", new String[]{gameType.toString()});
+        database.close();
     }
 
 
@@ -94,32 +97,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         cursor.close();
+        database.close();
         return false;
     }
 
-    private boolean isTableExists(SQLiteDatabase db, String tableName) {
+    private boolean isTableExists(String tableName) {
+        SQLiteDatabase db = getReadableDatabase();
         if (tableName == null || db == null || !db.isOpen()) {
             return false;
         }
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[]{"table", tableName});
         if (!cursor.moveToFirst()) {
             cursor.close();
+            db.close();
             return false;
         }
         int count = cursor.getInt(0);
         cursor.close();
+        db.close();
         return count > 0;
     }
 
     private void createDefaultHighScoreValues(SQLiteDatabase sqLiteDatabase) {
-        if (isTableExists(sqLiteDatabase, TABLE_NAME)) {
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + COLUMN_SCORE + " FROM " + TABLE_NAME, new String[]{});
-            if (cursor.getCount() == 9) {
-                cursor.close();
-                return;
-            }
-        }
-
 
         ContentValues contentValues = new ContentValues();
 

@@ -69,28 +69,41 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
         // Top captions
         if (gameType == GameType.HALFMARATHON) {
-            attachChild(new Text(x, 370, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
+            createTopCaption(gameType, x, 370);
         } else {
-            attachChild(new Text(x, 440, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
+            createTopCaption(gameType, x, 440);
         }
 
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
         for (int i = 0; i < 3; i++) {
             if (highScore != null && highScores.get(i).equals(highScore.getScore()) && gameType == highScore.getGameType()) {
-
-                Text text = new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
-                        highScores.get(i).toString(), vertexBufferObjectManager);
-                text.registerEntityModifier(new ParallelEntityModifier(
-                        new RotationModifier(5.0f,0.0f,360.0f),
-                        new ColorModifier(5.0f, Color.WHITE,Color.GREEN),
-                        new FadeInModifier(10.0f)));
-                attachChild(text);
+                createGreenHighscoreItem(x, i, highScores.get(i));
             } else {
-                attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
-                        highScores.get(i).toString(), vertexBufferObjectManager));
+                createHighscoreItem(x, i, highScores.get(i));
             }
 
         }
+    }
+
+    private void createGreenHighscoreItem(Integer x, Integer i, Float highScore) {
+        Text text = new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+                highScore.toString(), vertexBufferObjectManager);
+        text.registerEntityModifier(new ParallelEntityModifier(
+                new RotationModifier(5.0f, 0.0f, 360.0f),
+                new ColorModifier(5.0f, Color.WHITE, Color.GREEN),
+                new FadeInModifier(10.0f)));
+        attachChild(text);
+
+    }
+
+    private void createHighscoreItem(Integer x, Integer i, Float highScore) {
+        attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+                highScore.toString(), vertexBufferObjectManager));
+
+    }
+
+    private void createTopCaption(GameType gameType, Integer x, Integer y) {
+        attachChild(new Text(x, y, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
     }
 
     private void createBackground() {

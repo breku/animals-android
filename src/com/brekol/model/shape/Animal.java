@@ -29,6 +29,7 @@ public class Animal extends AnimatedSprite {
                 ResourcesManager.getInstance().getVertexBufferObjectManager());
         animalSound = ResourcesManager.getInstance().getAnimalSound(animalID);
         soundID = random.nextInt(ConstantsUtil.NUMBER_OF_SOUNDS_PER_ANIMAL);
+        setIgnoreUpdate(true);
     }
 
     @Override
