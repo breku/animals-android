@@ -7,10 +7,7 @@ import com.brekol.service.HighScoresService;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.GameType;
 import com.brekol.util.SceneType;
-import org.andengine.entity.modifier.ColorModifier;
-import org.andengine.entity.modifier.FadeInModifier;
-import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.*;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -74,16 +71,32 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
             createTopCaption(gameType, x, 440);
         }
 
+        boolean greenHighscoreItemCreated = false;
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
         for (int i = 0; i < 3; i++) {
             if (highScore != null && highScores.get(i).equals(highScore.getScore()) && gameType == highScore.getGameType()) {
                 createGreenHighscoreItem(x, i, highScores.get(i));
+                greenHighscoreItemCreated = true;
             } else {
                 createHighscoreItem(x, i, highScores.get(i));
             }
+        }
 
+        if(!greenHighscoreItemCreated && highScore!= null){
+            createRedHighscoreItem(highScore);
         }
     }
+
+    private void createRedHighscoreItem(HighScore highScore){
+        Text text = new Text(highScore.getCoordinateX(), 40, ResourcesManager.getInstance().getWhiteFont(),
+                highScore.getScore().toString(), vertexBufferObjectManager);
+        text.registerEntityModifier(new ParallelEntityModifier(
+                new ColorModifier(1.0f,Color.WHITE,Color.RED),
+                new RotationModifier(4.0f,-180.0f,0.0f),
+                new FadeOutModifier(10.0f)));
+        attachChild(text);
+    }
+
 
     private void createGreenHighscoreItem(Integer x, Integer i, Float highScore) {
         Text text = new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
