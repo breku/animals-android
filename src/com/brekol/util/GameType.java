@@ -12,7 +12,7 @@ public enum GameType {
         this.numberOfAnimas = numberOfAnimals;
     }
 
-    public int getNumberOfAnimas() {
+    public int getNumberOfAnimals() {
         return numberOfAnimas;
     }
 }

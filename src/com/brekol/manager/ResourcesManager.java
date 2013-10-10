@@ -51,6 +51,8 @@ public class ResourcesManager {
             buttonMarathonGameTextureRegion, backgroundGameTypeTextureRegion;
     private Map<Integer, ITiledTextureRegion> animalTextureRegionMap;
     private Map<Integer, Sound> animalSoundMap;
+    private List<Sound> winSoundList;
+    private List<Sound> loseSoundList;
     private Font whiteFont, blackFont;
 
 
@@ -167,6 +169,19 @@ public class ResourcesManager {
         } catch (final IOException e) {
             Debug.e(e);
         }
+
+        SoundFactory.setAssetBasePath("mfx/other/");
+        winSoundList = new ArrayList<Sound>();
+        loseSoundList = new ArrayList<Sound>();
+        try {
+            winSoundList.add(SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "win.ogg"));
+            loseSoundList.add(SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "lose.ogg"));
+            loseSoundList.add(SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "lose1.ogg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void loadAboutGraphics() {
@@ -445,5 +460,13 @@ public class ResourcesManager {
 
     public ITextureRegion getBackgroundGameTypeTextureRegion() {
         return backgroundGameTypeTextureRegion;
+    }
+
+    public List<Sound> getLoseSoundList() {
+        return loseSoundList;
+    }
+
+    public List<Sound> getWinSoundList() {
+        return winSoundList;
     }
 }

@@ -140,7 +140,7 @@ public class SceneManager {
             case GAME:
                 setScene(loadingScene);
                 ResourcesManager.getInstance().unloadGameTextures();
-                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 2, new ITimerCallback() {
+                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 4, new ITimerCallback() {
                     @Override
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);

@@ -58,8 +58,8 @@ public class AnimalService extends BaseService {
         Debug.d("GOOD");
     }
 
-    public void fail() {
+    public void fail(Animal animal) {
         Debug.d("FAIL");
-
+        Debug.d("Position: " + animal.getX() + "\t" + animal.getY());
     }
 }

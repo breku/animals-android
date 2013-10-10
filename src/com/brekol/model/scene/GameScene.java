@@ -12,6 +12,7 @@ import com.brekol.pool.AnimalPool;
 import com.brekol.service.AnimalService;
 import com.brekol.service.ChangeColorService;
 import com.brekol.service.HighScoresService;
+import com.brekol.service.SoundService;
 import com.brekol.util.ConstantsUtil;
 import com.brekol.util.GameType;
 import com.brekol.util.LevelType;
@@ -39,20 +40,23 @@ import java.util.Random;
  */
 public class GameScene extends BaseScene {
 
-
-    private HUD gameHUD;
-    private Text timeText;
-    private Integer numberOfGuessedAnimals;
     private SimpleLevelLoader levelLoader;
     private EntityLoader mainLevelLoader;
     private EntityLoader animalLoader;
+
+    private AnimalService animalService;
+    private HighScoresService highScoresService;
+    private ChangeColorService changeColorService;
+    private SoundService soundService;
+
+    private HUD gameHUD;
+    private Text timeText, numberOfAnimalsText;
+
+    private Integer numberOfGuessedAnimals;
     private Random random;
     private boolean isBackKeyPressed = false;
     private Integer animalID;
     private List<Animal> animalList;
-    private AnimalService animalService;
-    private HighScoresService highScoresService;
-    private ChangeColorService changeColorService;
     private int firstRunCounter = 0;
     private IEntity bottomWhiteRectangle;
     private GameType currentGameType;
@@ -83,6 +87,7 @@ public class GameScene extends BaseScene {
         changeColorService = new ChangeColorService();
         animalService = new AnimalService();
         highScoresService = new HighScoresService();
+        soundService = new SoundService();
 
         mainLevelLoader = new MainLevelLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_LEVEL);
         animalLoader = new AnimalLoader<SimpleLevelEntityLoaderData>(this, ConstantsUtil.TAG_ANIMAL);
@@ -97,6 +102,11 @@ public class GameScene extends BaseScene {
         currentGameType = (GameType) objects[0];
     }
 
+    /**
+     * Invoked every time when new
+     *
+     * @param levelID
+     */
     private void loadLevel(int levelID) {
         unregisterTouchAreas(new ClassTouchAreaMacher(Animal.class));
         detachAnimals();
@@ -113,7 +123,9 @@ public class GameScene extends BaseScene {
         gameHUD = new HUD();
 
         timeText = new Text(150, 40, resourcesManager.getBlackFont(), "Time: 999999999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
+        numberOfAnimalsText = new Text(500, 40, resourcesManager.getBlackFont(), "00/00", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
 
+        gameHUD.attachChild(numberOfAnimalsText);
         gameHUD.attachChild(timeText);
         camera.setHUD(gameHUD);
     }
@@ -149,6 +161,7 @@ public class GameScene extends BaseScene {
         super.onManagedUpdate(pSecondsElapsed);
 
         if (isBackKeyPressed) {
+            animalService.stopSound(animalList);
             loadMainMenuScene();
         }
 
@@ -158,6 +171,7 @@ public class GameScene extends BaseScene {
         }
 
         updateTime();
+        updateNumberOfAnimals();
 
         Animal clickedAnimal = animalService.getClickedAnimal(animalList);
         if (clickedAnimal != null) {
@@ -167,16 +181,19 @@ public class GameScene extends BaseScene {
                 animalService.stopSound(animalList);
                 numberOfGuessedAnimals++;
 
-                if (numberOfGuessedAnimals == currentGameType.getNumberOfAnimas()) {
+                // WIN
+                if (numberOfGuessedAnimals == currentGameType.getNumberOfAnimals()) {
                     float score = (System.currentTimeMillis() - startTime) / 1000.0f;
                     HighScore highScore = new HighScore(score, currentGameType);
                     if (highScoresService.isRecord(highScore)) {
                         highScoresService.addNewRecord(highScore);
                     }
                     detachAnimals();
+                    soundService.playWinSound();
                     SceneManager.getInstance().loadHighScoreSceneFrom(SceneType.GAME, highScore);
 
                 } else {
+                    // KEEP PLAYING - NEXT ANIMALS
                     changeColorService.changeIEntityColorFromToAndBack(bottomWhiteRectangle, Color.WHITE, Color.GREEN);
                     loadLevel(LevelType.EASY.getID());
                 }
@@ -184,11 +201,16 @@ public class GameScene extends BaseScene {
 
             } else {
                 // FAIL
-                animalService.fail();
+                animalService.fail(animalService.getPlayedAnimal(animalList));
                 detachAnimals();
+                soundService.playLoseSound();
                 SceneManager.getInstance().loadEndGameScene();
             }
         }
+    }
+
+    private void updateNumberOfAnimals() {
+        numberOfAnimalsText.setText(numberOfGuessedAnimals + "/" + currentGameType.getNumberOfAnimals());
     }
 
     private void updateTime() {
