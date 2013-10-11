@@ -202,6 +202,7 @@ public class GameScene extends BaseScene {
             } else {
                 // FAIL
                 animalService.fail(animalService.getPlayedAnimal(animalList));
+                animalService.stopSound(animalList);
                 detachAnimals();
                 soundService.playLoseSound();
                 SceneManager.getInstance().loadEndGameScene();

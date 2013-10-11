@@ -23,7 +23,8 @@ import java.util.List;
  */
 public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
-    HighScoresService highScoresService;
+    private HighScoresService highScoresService;
+    private boolean greenHighscoreItemCreated;
 
     /**
      * Constructor
@@ -45,6 +46,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
     private void init() {
         highScoresService = new HighScoresService();
+        greenHighscoreItemCreated = false;
     }
 
     private void createRecordsTable(Object... objects) {
@@ -71,7 +73,6 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
             createTopCaption(gameType, x, 440);
         }
 
-        boolean greenHighscoreItemCreated = false;
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
         for (int i = 0; i < 3; i++) {
             if (highScore != null && highScores.get(i).equals(highScore.getScore()) && gameType == highScore.getGameType()) {

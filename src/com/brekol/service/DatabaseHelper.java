@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_GAME_TYPE = "GAME_TYPE";
     private static final String COLUMN_SCORE = "SCORE";
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
 
     public DatabaseHelper(Context context) {
