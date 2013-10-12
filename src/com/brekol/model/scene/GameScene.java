@@ -231,6 +231,10 @@ public class GameScene extends BaseScene {
 
     @Override
     public void disposeScene() {
+
+        gameHUD.detachChild(numberOfAnimalsText);
+        gameHUD.detachChild(timeText);
+        gameHUD.clearChildScene();
         camera.setHUD(null);
         camera.setCenter(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2);
         camera.setChaseEntity(null);

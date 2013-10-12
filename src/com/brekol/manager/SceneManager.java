@@ -139,6 +139,7 @@ public class SceneManager {
                 break;
             case GAME:
                 setScene(loadingScene);
+                gameScene.disposeScene();
                 ResourcesManager.getInstance().unloadGameTextures();
                 ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 4, new ITimerCallback() {
                     @Override
