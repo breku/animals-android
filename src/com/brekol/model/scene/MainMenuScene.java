@@ -39,12 +39,12 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
         final IMenuItem newGameItem = new ScaleMenuItemDecorator(new SpriteMenuItem(NEW_GAME, ResourcesManager.getInstance().getButtonNewGameTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
         final IMenuItem aboutItem = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT, ResourcesManager.getInstance().getButtonAboutTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
-//        final IMenuItem optionsItem = new ScaleMenuItemDecorator(new SpriteMenuItem(OPTIONS, ResourcesManager.getInstance().getButtonOptionsTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
+       // final IMenuItem optionsItem = new ScaleMenuItemDecorator(new SpriteMenuItem(OPTIONS, ResourcesManager.getInstance().getButtonOptionsTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
         final IMenuItem exitItem = new ScaleMenuItemDecorator(new SpriteMenuItem(EXIT, ResourcesManager.getInstance().getButtonExitTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
         final IMenuItem recordsItem = new ScaleMenuItemDecorator(new SpriteMenuItem(RECORDS, ResourcesManager.getInstance().getButtonRecordsTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
 
         menuScene.addMenuItem(newGameItem);
-//        menuScene.addMenuItem(optionsItem);
+       // menuScene.addMenuItem(optionsItem);
         menuScene.addMenuItem(aboutItem);
         menuScene.addMenuItem(exitItem);
         menuScene.addMenuItem(recordsItem);
@@ -52,11 +52,12 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         menuScene.buildAnimations();
         menuScene.setBackgroundEnabled(false);
 
-        newGameItem.setPosition(200, 360);
-        aboutItem.setPosition(600, 360);
-//        optionsItem.setPosition(ConstantsUtil.SCREEN_WIDTH * 2 / 3, ConstantsUtil.SCREEN_HEIGHT * 3 / 4);
-        exitItem.setPosition(600, 160);
-        recordsItem.setPosition(200, 160);
+        newGameItem.setPosition(400, 369);
+        recordsItem.setPosition(400, 291);
+        // optionsItem.setPosition(400, 248);
+        //(ConstantsUtil.SCREEN_WIDTH * 2 / 3, ConstantsUtil.SCREEN_HEIGHT * 3 / 4);
+        aboutItem.setPosition(400, 213);
+        exitItem.setPosition(400, 135);
 
         menuScene.setOnMenuItemClickListener(this);
 
