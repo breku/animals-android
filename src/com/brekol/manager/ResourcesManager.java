@@ -220,7 +220,7 @@ public class ResourcesManager {
         // gameTextureAtlas has been created before, we just need to reload the textures
         if (gameTextureAtlasList != null) {
             for (BuildableBitmapTextureAtlas atlas : gameTextureAtlasList) {
-//                atlas.load();
+                atlas.load();
             }
             return;
         }
@@ -349,7 +349,7 @@ public class ResourcesManager {
 
     public void unloadGameTextures() {
         for (BuildableBitmapTextureAtlas atlas : gameTextureAtlasList) {
-//            atlas.unload();
+            atlas.unload();
         }
     }
 
