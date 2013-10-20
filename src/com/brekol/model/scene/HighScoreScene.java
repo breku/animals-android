@@ -15,6 +15,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
     private HighScoresService highScoresService;
     private boolean greenHighscoreItemCreated;
+    private DecimalFormat decimalFormat;
 
     /**
      * Constructor
@@ -47,6 +49,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
     private void init() {
         highScoresService = new HighScoresService();
         greenHighscoreItemCreated = false;
+        decimalFormat = new DecimalFormat("0.00");
     }
 
     private void createRecordsTable(Object... objects) {
@@ -76,14 +79,14 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
             }
         }
 
-        if(!greenHighscoreItemCreated && highScore!= null){
+        if(!greenHighscoreItemCreated && highScore!= null && gameType == highScore.getGameType()){
             createRedHighscoreItem(highScore);
         }
     }
 
     private void createRedHighscoreItem(HighScore highScore){
-        Text text = new Text(highScore.getCoordinateX(), 40, ResourcesManager.getInstance().getGreenFont(),
-                highScore.getScore().toString(), vertexBufferObjectManager);
+        Text text = new Text(highScore.getCoordinateX(), 160, ResourcesManager.getInstance().getWhiteFont(),
+                decimalFormat.format(highScore.getScore()), vertexBufferObjectManager);
         text.registerEntityModifier(new ParallelEntityModifier(
                 new ColorModifier(1.0f,Color.WHITE,Color.RED),
                 new RotationModifier(4.0f,-180.0f,0.0f),
@@ -94,7 +97,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
     private void createGreenHighscoreItem(Integer x, Integer i, Float highScore) {
         Text text = new Text(x, 280 - i * 40, ResourcesManager.getInstance().getGreenFont(),
-                highScore.toString(), vertexBufferObjectManager);
+                decimalFormat.format(highScore), vertexBufferObjectManager);
         text.registerEntityModifier(new ParallelEntityModifier(
                 new RotationModifier(5.0f, 0.0f, 360.0f),
                 new ColorModifier(5.0f, Color.WHITE, Color.GREEN),
@@ -105,12 +108,8 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
     private void createHighscoreItem(Integer x, Integer i, Float highScore) {
         attachChild(new Text(x, 280 - i * 40, ResourcesManager.getInstance().getGreenFont(),
-                highScore.toString(), vertexBufferObjectManager));
+                decimalFormat.format(highScore), vertexBufferObjectManager));
 
-    }
-
-    private void createTopCaption(GameType gameType, Integer x, Integer y) {
-        attachChild(new Text(x, y, ResourcesManager.getInstance().getGreenFont(), gameType.toString(), vertexBufferObjectManager));
     }
 
     private void createBackground() {

@@ -123,7 +123,7 @@ public class GameScene extends BaseScene {
         gameHUD = new HUD();
 
         timeText = new Text(150, 40, resourcesManager.getGreenFont(), "time: ", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
-        timerText = new Text(210, 40, resourcesManager.getGreenFont(), "99999", 30, new TextOptions(HorizontalAlign.CENTER), vertexBufferObjectManager);
+        timerText = new Text(260, 40, resourcesManager.getGreenFont(), "99999", 30, new TextOptions(HorizontalAlign.CENTER), vertexBufferObjectManager);
         numberOfAnimalsText = new Text(500, 40, resourcesManager.getGreenFont(), "00/00", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
 
         gameHUD.attachChild(numberOfAnimalsText);

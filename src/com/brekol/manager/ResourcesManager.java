@@ -79,7 +79,6 @@ public class ResourcesManager {
 
     public void loadGameResources() {
         loadGameGraphics();
-        loadGameFonts();
         loadGameMusic();
         loadEndGameResources();
     }
@@ -299,16 +298,6 @@ public class ResourcesManager {
         menuTextureAtlas.load();
     }
 
-    private void loadGameFonts() {
-        if (gameFontTextureAtlas != null) {
-            gameFontTextureAtlas.load();
-        }
-        FontFactory.setAssetBasePath("font/");
-        gameFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
-        blackFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), gameFontTextureAtlas, activity.getAssets(), "font1.ttf", 50, true, Color.BLACK, 2, Color.BLACK);
-        gameFontTextureAtlas.load();
-        blackFont.load();
-    }
 
 
     private void loadMainMenuFonts() {
@@ -318,13 +307,13 @@ public class ResourcesManager {
         FontFactory.setAssetBasePath("font/");
 
         menuFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
-        whiteFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), menuFontTextureAtlas, activity.getAssets(), "font2.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
+        whiteFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), menuFontTextureAtlas, activity.getAssets(), "white.ttf", 38, true, Color.WHITE, 2, Color.WHITE);
         menuFontTextureAtlas.load();
         whiteFont.load();
 
 
         greenFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
-        greenFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), greenFontTextureAtlas, activity.getAssets(), "mono.ttf", 24, true, Color.rgb(88, 143, 39), 1, Color.rgb(30, 63, 0));
+        greenFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), greenFontTextureAtlas, activity.getAssets(), "mono.ttf", 38, true, Color.rgb(88, 143, 39), 1, Color.rgb(30, 63, 0));
         greenFontTextureAtlas.load();
         greenFont.load();
 
@@ -333,8 +322,10 @@ public class ResourcesManager {
         yellowFontTextureAtlas.load();
         yellowFont.load();
 
-
-
+        gameFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        blackFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), gameFontTextureAtlas, activity.getAssets(), "font1.ttf", 50, true, Color.BLACK, 2, Color.BLACK);
+        gameFontTextureAtlas.load();
+        blackFont.load();
     }
 
 
