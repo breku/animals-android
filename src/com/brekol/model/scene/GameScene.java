@@ -50,7 +50,7 @@ public class GameScene extends BaseScene {
     private SoundService soundService;
 
     private HUD gameHUD;
-    private Text timeText, numberOfAnimalsText;
+    private Text timeText, timerText, numberOfAnimalsText;
 
     private Integer numberOfGuessedAnimals;
     private Random random;
@@ -122,11 +122,13 @@ public class GameScene extends BaseScene {
     private void createHUD() {
         gameHUD = new HUD();
 
-        timeText = new Text(150, 40, resourcesManager.getBlackFont(), "Time: 999999999999", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
-        numberOfAnimalsText = new Text(500, 40, resourcesManager.getBlackFont(), "00/00", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
+        timeText = new Text(150, 40, resourcesManager.getGreenFont(), "time: ", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
+        timerText = new Text(210, 40, resourcesManager.getGreenFont(), "99999", 30, new TextOptions(HorizontalAlign.CENTER), vertexBufferObjectManager);
+        numberOfAnimalsText = new Text(500, 40, resourcesManager.getGreenFont(), "00/00", new TextOptions(HorizontalAlign.LEFT), vertexBufferObjectManager);
 
         gameHUD.attachChild(numberOfAnimalsText);
         gameHUD.attachChild(timeText);
+        gameHUD.attachChild(timerText);
         camera.setHUD(gameHUD);
     }
 
@@ -216,7 +218,7 @@ public class GameScene extends BaseScene {
 
     private void updateTime() {
         long elapsedTime = (System.currentTimeMillis() - startTime) / 10;
-        timeText.setText("Time:   " + elapsedTime / 100 + "." + elapsedTime % 100);
+        timerText.setText(elapsedTime / 100 + "." + elapsedTime % 100);
     }
 
     @Override
@@ -234,6 +236,7 @@ public class GameScene extends BaseScene {
 
         gameHUD.detachChild(numberOfAnimalsText);
         gameHUD.detachChild(timeText);
+        gameHUD.detachChild(timerText);
         gameHUD.clearChildScene();
         camera.setHUD(null);
         camera.setCenter(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2);

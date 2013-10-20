@@ -22,7 +22,7 @@ public class AboutScene extends BaseScene implements IOnSceneTouchListener {
 
     private void createBackground() {
         attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getAboutBackgroundTextureRegion(), vertexBufferObjectManager));
-        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getAboutTextureRegion(), vertexBufferObjectManager));
+       // attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getAboutTextureRegion(), vertexBufferObjectManager));
     }
 
     @Override

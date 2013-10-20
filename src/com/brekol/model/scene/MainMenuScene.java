@@ -52,12 +52,12 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         menuScene.buildAnimations();
         menuScene.setBackgroundEnabled(false);
 
-        newGameItem.setPosition(400, 369);
-        recordsItem.setPosition(400, 291);
+        newGameItem.setPosition(400, 376);
+        recordsItem.setPosition(400, 288);
         // optionsItem.setPosition(400, 248);
         //(ConstantsUtil.SCREEN_WIDTH * 2 / 3, ConstantsUtil.SCREEN_HEIGHT * 3 / 4);
-        aboutItem.setPosition(400, 213);
-        exitItem.setPosition(400, 135);
+        aboutItem.setPosition(400, 200);
+        exitItem.setPosition(400, 112);
 
         menuScene.setOnMenuItemClickListener(this);
 

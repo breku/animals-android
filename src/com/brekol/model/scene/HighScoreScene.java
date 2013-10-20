@@ -52,26 +52,19 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
     private void createRecordsTable(Object... objects) {
 
         if (objects.length == 0) {
-            createHighscoresFor(GameType.CLASSIC, 200, null);
-            createHighscoresFor(GameType.HALFMARATHON, 400, null);
-            createHighscoresFor(GameType.MARATHON, 600, null);
+            createHighscoresFor(GameType.CLASSIC, 134, null);
+            createHighscoresFor(GameType.HALFMARATHON, 382, null);
+            createHighscoresFor(GameType.MARATHON, 648, null);
         } else {
             HighScore highScore = (HighScore) objects[0];
-            createHighscoresFor(GameType.CLASSIC, 200, highScore);
-            createHighscoresFor(GameType.HALFMARATHON, 400, highScore);
-            createHighscoresFor(GameType.MARATHON, 600, highScore);
+            createHighscoresFor(GameType.CLASSIC, 134, highScore);
+            createHighscoresFor(GameType.HALFMARATHON, 382, highScore);
+            createHighscoresFor(GameType.MARATHON, 648, highScore);
         }
 
     }
 
     private void createHighscoresFor(GameType gameType, int x, HighScore highScore) {
-
-        // Top captions
-        if (gameType == GameType.HALFMARATHON) {
-            createTopCaption(gameType, x, 370);
-        } else {
-            createTopCaption(gameType, x, 440);
-        }
 
         List<Float> highScores = highScoresService.getHighScoresFor(gameType);
         for (int i = 0; i < 3; i++) {
@@ -89,7 +82,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
     }
 
     private void createRedHighscoreItem(HighScore highScore){
-        Text text = new Text(highScore.getCoordinateX(), 40, ResourcesManager.getInstance().getWhiteFont(),
+        Text text = new Text(highScore.getCoordinateX(), 40, ResourcesManager.getInstance().getGreenFont(),
                 highScore.getScore().toString(), vertexBufferObjectManager);
         text.registerEntityModifier(new ParallelEntityModifier(
                 new ColorModifier(1.0f,Color.WHITE,Color.RED),
@@ -100,7 +93,7 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
 
 
     private void createGreenHighscoreItem(Integer x, Integer i, Float highScore) {
-        Text text = new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+        Text text = new Text(x, 280 - i * 40, ResourcesManager.getInstance().getGreenFont(),
                 highScore.toString(), vertexBufferObjectManager);
         text.registerEntityModifier(new ParallelEntityModifier(
                 new RotationModifier(5.0f, 0.0f, 360.0f),
@@ -111,13 +104,13 @@ public class HighScoreScene extends BaseScene implements IOnSceneTouchListener {
     }
 
     private void createHighscoreItem(Integer x, Integer i, Float highScore) {
-        attachChild(new Text(x, 300 - i * 100, ResourcesManager.getInstance().getWhiteFont(),
+        attachChild(new Text(x, 280 - i * 40, ResourcesManager.getInstance().getGreenFont(),
                 highScore.toString(), vertexBufferObjectManager));
 
     }
 
     private void createTopCaption(GameType gameType, Integer x, Integer y) {
-        attachChild(new Text(x, y, ResourcesManager.getInstance().getWhiteFont(), gameType.toString(), vertexBufferObjectManager));
+        attachChild(new Text(x, y, ResourcesManager.getInstance().getGreenFont(), gameType.toString(), vertexBufferObjectManager));
     }
 
     private void createBackground() {

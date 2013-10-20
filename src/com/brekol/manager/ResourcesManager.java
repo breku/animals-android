@@ -39,7 +39,8 @@ public class ResourcesManager {
     private Camera camera;
     private VertexBufferObjectManager vertexBufferObjectManager;
 
-    private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas;
+    private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, yellowFontTextureAtlas,
+            greenFontTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas, endGameTextureAtlas,
             recordTextureAtlas, gameTypeTextureAtlas;
     private List<BuildableBitmapTextureAtlas> gameTextureAtlasList;
@@ -53,7 +54,7 @@ public class ResourcesManager {
     private Map<Integer, Sound> animalSoundMap;
     private List<Sound> winSoundList;
     private List<Sound> loseSoundList;
-    private Font whiteFont, blackFont;
+    private Font whiteFont, blackFont, yellowFont, greenFont;
 
 
     public static void prepareManager(Engine engine, BaseGameActivity activity, Camera camera, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -188,8 +189,8 @@ public class ResourcesManager {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/about/");
         aboutTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 
-        aboutBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutTextureAtlas, activity, "background.jpg");
-        aboutTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutTextureAtlas, activity, "about.png");
+        aboutBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutTextureAtlas, activity, "animals_about.jpg");
+        //aboutTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(aboutTextureAtlas, activity, "about.png");
 
         try {
             aboutTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
@@ -315,10 +316,25 @@ public class ResourcesManager {
             return;
         }
         FontFactory.setAssetBasePath("font/");
+
         menuFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
         whiteFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), menuFontTextureAtlas, activity.getAssets(), "font2.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
         menuFontTextureAtlas.load();
         whiteFont.load();
+
+
+        greenFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        greenFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), greenFontTextureAtlas, activity.getAssets(), "mono.ttf", 24, true, Color.rgb(88, 143, 39), 1, Color.rgb(30, 63, 0));
+        greenFontTextureAtlas.load();
+        greenFont.load();
+
+        yellowFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        yellowFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), yellowFontTextureAtlas, activity.getAssets(), "showg.TTF", 50, true, Color.rgb(251, 253, 110), 1, Color.rgb(98, 99, 32));
+        yellowFontTextureAtlas.load();
+        yellowFont.load();
+
+
+
     }
 
 
@@ -422,8 +438,16 @@ public class ResourcesManager {
         return whiteFont;
     }
 
+    public Font getGreenFont() {
+        return greenFont;
+    }
+
     public Font getBlackFont() {
         return blackFont;
+    }
+
+    public Font getYellowFont() {
+        return yellowFont;
     }
 
     public ITiledTextureRegion getAnimalTexture(Integer animalID) {

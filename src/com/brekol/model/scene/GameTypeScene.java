@@ -48,9 +48,9 @@ public class GameTypeScene extends BaseScene implements MenuScene.IOnMenuItemCli
         menuScene.buildAnimations();
         menuScene.setBackgroundEnabled(false);
 
-        classicGameItem.setPosition(200, 240);
-        halfmarathonGameItem.setPosition(400, 240);
-        marathonGameItem.setPosition(600, 240);
+        classicGameItem.setPosition(400, 317);
+        halfmarathonGameItem.setPosition(400, 207);
+        marathonGameItem.setPosition(400, 97);
 
         menuScene.setOnMenuItemClickListener(this);
 
