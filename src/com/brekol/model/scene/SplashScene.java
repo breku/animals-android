@@ -22,7 +22,6 @@ public class SplashScene extends BaseScene {
                 pGLState.enableDither();
             }
         };
-        sprite.setScale(1.5f);
         sprite.setPosition(400, 240);
         attachChild(sprite);
     }
