@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_GAME_TYPE = "GAME_TYPE";
     private static final String COLUMN_SCORE = "SCORE";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 20;
 
 
     public DatabaseHelper(Context context) {
@@ -123,21 +123,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COLUMN_GAME_TYPE, GameType.CLASSIC.toString());
-        contentValues.put(COLUMN_SCORE, 999);
+        contentValues.put(COLUMN_SCORE, 999.0f);
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
         contentValues.put(COLUMN_GAME_TYPE, GameType.HALFMARATHON.toString());
-        contentValues.put(COLUMN_SCORE, 999);
+        contentValues.put(COLUMN_SCORE, 999.0f);
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
         contentValues.put(COLUMN_GAME_TYPE, GameType.MARATHON.toString());
-        contentValues.put(COLUMN_SCORE, 999);
+        contentValues.put(COLUMN_SCORE, 999.0f);
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);

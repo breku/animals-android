@@ -17,13 +17,13 @@ public class HighScore {
         this.gameType = gameType;
         switch (gameType){
             case CLASSIC:
-                coordinateX = 200;
+                coordinateX = 134;
                 break;
             case HALFMARATHON:
-                coordinateX = 400;
+                coordinateX = 382;
                 break;
             case MARATHON:
-                coordinateX = 600;
+                coordinateX = 648;
                 break;
             default:
                 throw new UnsupportedOperationException();
